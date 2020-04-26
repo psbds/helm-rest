@@ -102,3 +102,11 @@ dist
 
 # TernJS port file
 .tern-port
+
+bin
+node_modules
+.env
+testReport
+.nyc_output
+.stryker-tmp
+stryker.log
