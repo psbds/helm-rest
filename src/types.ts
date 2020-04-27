@@ -3,11 +3,14 @@ import { Router } from "express";
 export interface IHelm {
 
     install(releaseName: string, chart: string, args?: string): Promise<string>;
-    /*upgrade(releaseName: string, chart: string, args: string): string;
-    uninstall(command: string): string;
-    list(command: string): string;
-    rollback(command: string): string;
-    repo(command: string): string;*/
+    upgrade(releaseName: string, chart: string, args: string): Promise<string>;
+    delete(releaseName: string, args?: string): Promise<string>;
+    rollback(releaseName: string, revision: string, args?: string): Promise<string>;
+    getAll(releaseName: string, args?: string): Promise<string>;
+    repoAdd(repoName: string, repoUrl: string, args?: string): Promise<string>;
+    repoUpdate(args?: string): Promise<string>;
+    registryLogin(host: string, username: string, password: string, args?: string): Promise<string>;
+    command(command: string): Promise<string>;
 
 }
 
