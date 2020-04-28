@@ -4,21 +4,20 @@ import * as serverEvents from './serverEvents';
 import { container, Lifecycle } from "tsyringe";
 
 import RouteInit from "../routes/RouteInit";
-import DefaultHandler from './serverHandlerDefaults';
-import ErrorHandler from './serverHandlerError';
-import NotFoundHandler from './serverHandlerNotFound';
+import DefaultHandler from './handlers/DefaultHandlers';
+import ErrorHandler from './handlers/ErrorHandler';
+import NotFoundHandler from './handlers/NotFoundHandler';
 
 export function createApp(configureRoutes: (app: express.Application) => any): express.Application {
     const app: express.Application = express();
 
-    DefaultHandler.init(app);
+    DefaultHandler(app);
 
     if (configureRoutes)
         configureRoutes(app);
 
-    NotFoundHandler.init(app);
-    ErrorHandler.init(app);
-
+    NotFoundHandler(app);
+    ErrorHandler(app);
 
     // App Settings
     app.set('port', process.env.PORT || 80);

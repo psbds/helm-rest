@@ -66,13 +66,13 @@ describe('Helm', () => {
         });
     });
 
-    describe('getAll', () => {
-        it('should run getAll command and return result', async () => {
+    describe('get', () => {
+        it('should run get command and return result', async () => {
             var helm = new Helm(execHelperStub);
 
             var spy = execHelperStub.exec.withArgs("helm get all nginx --anything").returns(Promise.resolve({ stdout: "Success", stderr: null }));
 
-            var response = await helm.getAll("nginx", "--anything");
+            var response = await helm.get("all", "nginx", "--anything");
 
             expect(response).equals("Success");
             expect(spy.calledOnce).equals(true);

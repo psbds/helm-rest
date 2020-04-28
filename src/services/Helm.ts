@@ -34,8 +34,8 @@ export default class Helm implements IHelm {
         return commandResult.stdout;
     }
 
-    async getAll(releaseName: string, args?: string): Promise<string> {
-        let commandResult = await this.execHelper.exec(`helm get all ${releaseName} ${args ? args : ""}`.trim());
+    async get(subcommand: string, releaseName: string, args?: string): Promise<string> {
+        let commandResult = await this.execHelper.exec(`helm get ${subcommand} ${releaseName} ${args ? args : ""}`.trim());
         return commandResult.stdout;
     }
 
