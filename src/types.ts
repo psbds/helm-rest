@@ -32,13 +32,16 @@ export interface IHelmRoute extends ICustomRoute {
     repoAdd(req: Request, res: Response, next: NextFunction): void;
     repoUpdate(req: Request, res: Response, next: NextFunction): void;
     registryLogin(req: Request, res: Response, next: NextFunction): void;
+    command(req: Request, res: Response, next: NextFunction): void;
 
 }
+
 export interface IRoute {
     route: string;
     method: string;
     handler: (req: Request, res: Response, next: NextFunction) => any
 }
+
 export interface ICustomRoute {
 
     routes: IRoute[];

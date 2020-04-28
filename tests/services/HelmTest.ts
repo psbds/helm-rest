@@ -8,7 +8,7 @@ import { StubbedInstance, stubInterface as StubInterface } from "ts-sinon";
 import { IExecHelper } from "../../src/types";
 import Helm from "../../src/services/Helm";
 
-describe('Helm', () => {
+describe('Services: Helm', () => {
     let execHelperStub: StubbedInstance<IExecHelper>;
     beforeEach(() => {
         execHelperStub = StubInterface<IExecHelper>();

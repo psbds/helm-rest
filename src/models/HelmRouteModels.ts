@@ -1,9 +1,19 @@
 import { IsNotEmpty, MaxLength } from "class-validator";
 
-export class HelmInstallModel {
 
-    constructor(obj) {
-        Object.assign(this, obj)
+export class HelmDefaultModel {
+    constructor(body) {
+        Object.assign(this, body)
+    }
+
+    @MaxLength(500)
+    public args: string;
+}
+
+export class HelmInstallModel extends HelmDefaultModel {
+
+    constructor(body) {
+        super(body)
     }
 
     @MaxLength(250)
@@ -14,15 +24,12 @@ export class HelmInstallModel {
     @IsNotEmpty()
     public chart: string;
 
-    @MaxLength(500)
-    public args: string;
-
 }
 
-export class HelmUpgradeModel {
+export class HelmUpgradeModel extends HelmDefaultModel {
 
-    constructor(obj) {
-        Object.assign(this, obj)
+    constructor(body) {
+        super(body)
     }
 
     @MaxLength(250)
@@ -33,30 +40,24 @@ export class HelmUpgradeModel {
     @IsNotEmpty()
     public chart: string;
 
-    @MaxLength(500)
-    public args: string;
-
 }
 
-export class HelmDeleteModel {
+export class HelmDeleteModel extends HelmDefaultModel {
 
-    constructor(obj) {
-        Object.assign(this, obj)
+    constructor(body) {
+        super(body)
     }
 
     @MaxLength(250)
     @IsNotEmpty()
     public releaseName: string;
 
-    @MaxLength(500)
-    public args: string;
-
 }
 
-export class HelmRollbackModel {
+export class HelmRollbackModel extends HelmDefaultModel {
 
-    constructor(obj) {
-        Object.assign(this, obj)
+    constructor(body) {
+        super(body)
     }
 
     @MaxLength(250)
@@ -67,15 +68,12 @@ export class HelmRollbackModel {
     @IsNotEmpty()
     public revision: string;
 
-    @MaxLength(500)
-    public args: string;
-
 }
 
-export class HelmGetModel {
+export class HelmGetModel extends HelmDefaultModel {
 
-    constructor(obj) {
-        Object.assign(this, obj)
+    constructor(body) {
+        super(body)
     }
 
     @MaxLength(250)
@@ -86,15 +84,12 @@ export class HelmGetModel {
     @IsNotEmpty()
     public releaseName: string;
 
-    @MaxLength(500)
-    public args: string;
-
 }
 
-export class HelmRepoAddModel {
+export class HelmRepoAddModel extends HelmDefaultModel {
 
-    constructor(obj) {
-        Object.assign(this, obj)
+    constructor(body) {
+        super(body)
     }
 
     @MaxLength(250)
@@ -105,7 +100,44 @@ export class HelmRepoAddModel {
     @IsNotEmpty()
     public repoUrl: string;
 
+}
+
+export class HelmRepoUpdateModel extends HelmDefaultModel {
+
+    constructor(body) {
+        super(body)
+    }
+
+}
+
+export class HelmRegistryLoginModel extends HelmDefaultModel {
+
+    constructor(body) {
+        super(body)
+    }
+
+    @MaxLength(250)
+    @IsNotEmpty()
+    public host: string;
+
+    @MaxLength(250)
+    @IsNotEmpty()
+    public username: string;
+
+    @MaxLength(250)
+    @IsNotEmpty()
+    public password: string;
+
+}
+
+export class HelmCommandModel {
+
+    constructor(body) {
+        Object.assign(this, body)
+    }
+    
     @MaxLength(500)
-    public args: string;
+    @IsNotEmpty()
+    public command: string;
 
 }

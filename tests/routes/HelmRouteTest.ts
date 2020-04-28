@@ -12,7 +12,7 @@ import HelmRoute from "../../src/routes/HelmRoute";
 import RouteTestServer from "./_RouteTestServer";
 var request = require('supertest');
 
-describe('HelmRoute', () => {
+describe('Routes: HelmRoute', () => {
     let helmStub: StubbedInstance<IHelm>;
     let testServer: express.Application;
     let helmRoute: HelmRoute;
@@ -63,12 +63,12 @@ describe('HelmRoute', () => {
 
     });
 
-    describe('POST /helm/upgrade', () => {
+    describe('PUT /helm/upgrade', () => {
         it('200: should run upgrade command and return result', async () => {
             var spy = helmStub.upgrade.withArgs("nginx", "stable/nginx", "--dry-run").returns(Promise.resolve("successfull result"));
 
             var result = await request(testServer)
-                .post('/helm/upgrade')
+                .put('/helm/upgrade')
                 .send({ releaseName: "nginx", chart: "stable/nginx", args: "--dry-run" })
                 .expect('Content-Type', /json/)
                 .expect(200);
@@ -79,7 +79,7 @@ describe('HelmRoute', () => {
 
         it('500: should return errors message from not provided required parameters', async () => {
             var result = await request(testServer)
-                .post('/helm/upgrade')
+                .put('/helm/upgrade')
                 .expect('Content-Type', /json/)
                 .expect(500);
 
@@ -91,7 +91,7 @@ describe('HelmRoute', () => {
             var spy = helmStub.upgrade.throws(new Error("error result"));
 
             var result = await request(testServer)
-                .post('/helm/upgrade')
+                .put('/helm/upgrade')
                 .send({ releaseName: "nginx", chart: "stable/nginx", args: "--dry-run" })
                 .expect('Content-Type', /json/)
                 .expect(500);
@@ -219,12 +219,12 @@ describe('HelmRoute', () => {
 
     describe('POST /helm/repo/add', () => {
         const PATH = '/helm/repo/add';
-        it('200: should run get command and return result', async () => {
+        it('200: should run repo add command and return result', async () => {
             var spy = helmStub.repoAdd.withArgs("stable", "stable.com", "--dry-run").returns(Promise.resolve("successfull result"));
 
             var result = await request(testServer)
                 .post(PATH)
-                .query({ repoName: "stable", repoUrl: "stable.com", args: "--dry-run" })
+                .send({ repoName: "stable", repoUrl: "stable.com", args: "--dry-run" })
                 .expect('Content-Type', /json/)
                 .expect(200);
 
@@ -247,7 +247,114 @@ describe('HelmRoute', () => {
 
             var result = await request(testServer)
                 .post(PATH)
-                .query({ repoName: "stable", repoUrl: "stable.com", args: "--dry-run" })
+                .send({ repoName: "stable", repoUrl: "stable.com", args: "--dry-run" })
+                .expect('Content-Type', /json/)
+                .expect(500);
+
+            expect(result.body.message).equals("error result");
+            expect(spy.calledOnce).equals(true);
+        });
+    });
+
+    describe('GET /helm/repo/update', () => {
+        const PATH = '/helm/repo/update';
+        it('200: should run repo update command and return result', async () => {
+            var spy = helmStub.repoUpdate.withArgs("--dry-run").returns(Promise.resolve("successfull result"));
+
+            var result = await request(testServer)
+                .get(PATH)
+                .query({ args: "--dry-run" })
+                .expect('Content-Type', /json/)
+                .expect(200);
+
+            expect(result.body).equals("successfull result");
+            expect(spy.calledOnce).equals(true);
+        });
+
+        it('500: should return error message when error running get command', async () => {
+            var spy = helmStub.repoUpdate.throws(new Error("error result"));
+
+            var result = await request(testServer)
+                .get(PATH)
+                .query({ args: "--dry-run" })
+                .expect('Content-Type', /json/)
+                .expect(500);
+
+            expect(result.body.message).equals("error result");
+            expect(spy.calledOnce).equals(true);
+        });
+    });
+
+    describe('POST /helm/registry/login', () => {
+        const PATH = '/helm/registry/login';
+        it('200: should run registry login command and return result', async () => {
+            var spy = helmStub.registryLogin.withArgs("host", "username", "password", "--dry-run").returns(Promise.resolve("successfull result"));
+
+            var result = await request(testServer)
+                .post(PATH)
+                .send({ host: "host", username: "username", password: "password", args: "--dry-run" })
+                .expect('Content-Type', /json/)
+                .expect(200);
+
+            expect(result.body).equals("successfull result");
+            expect(spy.calledOnce).equals(true);
+        });
+
+        it('500: should return errors message from not provided required parameters', async () => {
+            var result = await request(testServer)
+                .post(PATH)
+                .expect('Content-Type', /json/)
+                .expect(500);
+
+            expect(result.body.validation.some(x => x == "host should not be empty")).equals(true);
+            expect(result.body.validation.some(x => x == "username should not be empty")).equals(true);
+            expect(result.body.validation.some(x => x == "password should not be empty")).equals(true);
+        });
+
+        it('500: should return error message when error running get command', async () => {
+            var spy = helmStub.registryLogin.throws(new Error("error result"));
+
+            var result = await request(testServer)
+                .post(PATH)
+                .send({ host: "host", username: "username", password: "password", args: "--dry-run" })
+                .expect('Content-Type', /json/)
+                .expect(500);
+
+            expect(result.body.message).equals("error result");
+            expect(spy.calledOnce).equals(true);
+        });
+    });
+
+    describe('POST /helm/command', () => {
+        const PATH = '/helm/command';
+        it('200: should run custom command and return result', async () => {
+            var spy = helmStub.command.withArgs("command").returns(Promise.resolve("successfull result"));
+
+            var result = await request(testServer)
+                .post(PATH)
+                .send({ command: "command" })
+                .expect('Content-Type', /json/)
+                .expect(200);
+
+            expect(result.body).equals("successfull result");
+            expect(spy.calledOnce).equals(true);
+        });
+
+        it('500: should return errors message from not provided required parameters', async () => {
+            var result = await request(testServer)
+                .post(PATH)
+                .expect('Content-Type', /json/)
+                .expect(500);
+
+            expect(result.body.validation.some(x => x == "command should not be empty")).equals(true);
+        });
+
+        it('500: should return error message when error running get command', async () => {
+            var spy = helmStub.command.throws(new Error("error result"));
+
+            var result = await request(testServer)
+                .post(PATH)
+                .send({ command: "command" })
                 .expect('Content-Type', /json/)
                 .expect(500);
 
