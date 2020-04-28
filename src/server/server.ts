@@ -1,33 +1,40 @@
 import * as express from 'express';
 import * as http from 'http';
 import * as serverEvents from './serverEvents';
+import { container, Lifecycle } from "tsyringe";
 
-import * as Routes from "../routes";
+import RouteInit from "../routes/RouteInit";
 import DefaultHandler from './serverHandlerDefaults';
 import ErrorHandler from './serverHandlerError';
 import NotFoundHandler from './serverHandlerNotFound';
 
-const app: express.Application = express();
+export function createApp(configureRoutes: (app: express.Application) => any): express.Application {
+    const app: express.Application = express();
 
-DefaultHandler.init(app);
+    DefaultHandler.init(app);
 
-Routes.init(app);
+    if (configureRoutes)
+        configureRoutes(app);
 
-NotFoundHandler.init(app);
-ErrorHandler.init(app);
-
-
-// App Settings
-app.set('port', process.env.PORT || 80);
-app.set('secret', process.env.SECRET || 'superSecret');
+    NotFoundHandler.init(app);
+    ErrorHandler.init(app);
 
 
-// Running Web Server
-const Server: http.Server = http.createServer(app);
+    // App Settings
+    app.set('port', process.env.PORT || 80);
+    app.set('secret', process.env.SECRET || 'superSecret');
 
-Server.listen(app.get('port'));
+    return app;
+}
 
-Server.on('error', (error: Error) => serverEvents.onError(error, app.get('port')));
-Server.on('listening', serverEvents.onListening.bind(Server));
+export function startServer() {
 
-export default app;
+    const routeConfig: RouteInit = container.resolve<RouteInit>("RouteInit");
+    const app: express.Application = createApp((app) => routeConfig.init(app));
+    const Server: http.Server = http.createServer(app);
+
+    Server.listen(app.get('port'));
+
+    Server.on('error', (error: Error) => serverEvents.onError(error, app.get('port')));
+    Server.on('listening', serverEvents.onListening.bind(Server));
+}

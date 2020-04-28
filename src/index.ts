@@ -1,2 +1,4 @@
 require("./helpers/dependencyInjection");
-require("./server/server");
+import { startServer } from "./server/server";
+
+startServer();

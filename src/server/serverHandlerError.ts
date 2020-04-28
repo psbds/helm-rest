@@ -1,43 +1,24 @@
-import * as http from 'http';
-import { NextFunction, Request } from 'express';
-import * as express from 'express';
-
-export class HttpError extends Error {
-    status: number;
-    message: string;
-    name: 'HttpError';
-
-    constructor(status?: number, message?: string) {
-        super(message);
-
-        Error.captureStackTrace(this, this.constructor);
-
-        this.status = status || 500;
-        this.message = message || http.STATUS_CODES[this.status] || 'Error';
-    }
-}
+import { NextFunction, Request, Application } from 'express';
+import { HttpError } from "../errors/HttpError";
 
 export default class ErrorHandler {
 
-    static init(app: express.Application): void {
-        app.use((error: Error, req: express.Request, res: Response, next: express.NextFunction) => {
+    static init(app: Application): void {
+        app.use((error: Error, req: Request, res: Response, next: NextFunction) => {
             if (typeof error === 'number') {
                 error = new HttpError(error);
             }
 
+            let httpError: HttpError;
+
             if (error instanceof HttpError) {
-                ErrorHandler.sendHttpErrorModule(error, req, res, next);
+                httpError = error;
             } else {
-                if (app.get('env') === 'development') {
-                    let httpError = new HttpError(500, error.message);
-                    ErrorHandler.sendHttpErrorModule(httpError, req, res, next);
-                } else {
-                    let httpError = new HttpError(500);
-                    ErrorHandler.sendHttpErrorModule(httpError, req, res, next);
-                }
+                var isDev = app.get('env') === 'development';
+                httpError = new HttpError(500, isDev ? error.message : null, (<any>error).validation);
             }
 
-            console.error(error);
+            ErrorHandler.sendHttpErrorModule(httpError, req, res, next);
             next();
         });
     }
@@ -53,7 +34,8 @@ export default class ErrorHandler {
             res.json({
                 status: error.status,
                 name: error.name,
-                message: error.message
+                message: error.message,
+                validation: error.validation
             });
         } else {
             res.send(this.generateHTML(error));
@@ -72,4 +54,3 @@ export default class ErrorHandler {
         return '';
     };
 }
-

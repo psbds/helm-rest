@@ -37,6 +37,11 @@ export default class ErrorHandler {
             res.header('Access-Control-Allow-Credentials', 'true');
             next();
         });
+
+        app.use((req, res, next) => {
+            res.setHeader('Content-Type', 'application/json');
+            next();
+        })
     }
 
 }

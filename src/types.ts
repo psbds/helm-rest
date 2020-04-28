@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Router, Request, Response, NextFunction, express } from "express";
 
 export interface IHelm {
 
@@ -21,8 +21,15 @@ export interface IExecHelper {
 }
 
 // # Routes
+
+export interface IHelmRoute extends ICustomRoute {
+
+    install(req: Request, res: Response, next: NextFunction): void;
+
+}
+
 export interface ICustomRoute {
 
-    configureRouter(router: Router): Router
+    configureRouter(app: express.Application): Router
 
 }
