@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { container, Lifecycle } from "tsyringe";
 
-import ExecHelper from "./ExecHelper";
+import ExecHelper from "./ExecLibHelper";
 import HelmRoute from "../routes/HelmRoute";
 
 import Helm from "../services/Helm";
