@@ -26,7 +26,7 @@ steps:
 - task: PublishTestResults@2
   inputs:
     testResultsFormat: 'JUnit'
-    testResultsFiles: '**/testReport.xml'
+    testResultsFiles: '**/test-results.xml'
 - task: PublishCodeCoverageResults@1
   inputs:
     codeCoverageTool: 'Cobertura'
