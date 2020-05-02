@@ -14,6 +14,11 @@ export default class Helm implements IHelm {
         return commandResult.stdout;
     }
 
+    async list(args: string): Promise<string> {
+        let commandResult = await this.execHelper.exec(`helm list ${args ? args : ""}`.trim());
+        return commandResult.stdout;
+    }
+
     async install(releaseName: string, chart: string, args?: string): Promise<string> {
         let commandResult = await this.execHelper.exec(`helm install ${releaseName} ${chart} ${args ? args : ""}`.trim());
         return commandResult.stdout;

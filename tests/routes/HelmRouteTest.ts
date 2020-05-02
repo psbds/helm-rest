@@ -285,6 +285,36 @@ describe('Routes: HelmRoute', () => {
         });
     });
 
+    describe('GET /helm/list', () => {
+        const PATH = '/helm/list';
+        it('200: should run list command and return result', async () => {
+            var spy = helmStub.list.withArgs("--dry-run").returns(Promise.resolve("successfull result"));
+
+            var result = await request(testServer)
+                .get(PATH)
+                .query({ args: "--dry-run" })
+                .expect('Content-Type', /json/)
+                .expect(200);
+
+            expect(result.body).equals("successfull result");
+            expect(spy.calledOnce).equals(true);
+        });
+
+        it('500: should return error message when error running get command', async () => {
+            var spy = helmStub.list.throws(new Error("error result"));
+
+            var result = await request(testServer)
+                .get(PATH)
+                .query({ args: "--dry-run" })
+                .expect('Content-Type', /json/)
+                .expect(500);
+
+            expect(result.body.message).equals("error result");
+            expect(spy.calledOnce).equals(true);
+        });
+    });
+
+
     describe('POST /helm/registry/login', () => {
         const PATH = '/helm/registry/login';
         it('200: should run registry login command and return result', async () => {

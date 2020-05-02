@@ -11,6 +11,7 @@ export interface IHelm {
     repoUpdate(args?: string): Promise<string>;
     registryLogin(host: string, username: string, password: string, args?: string): Promise<string>;
     command(command: string): Promise<string>;
+    list(list: string): Promise<string>;
 
 }
 
@@ -38,6 +39,7 @@ export interface IHelmRoute extends ICustomRoute {
     repoUpdate(req: Request, res: Response, next: NextFunction): void;
     registryLogin(req: Request, res: Response, next: NextFunction): void;
     command(req: Request, res: Response, next: NextFunction): void;
+    list(req: Request, res: Response, next: NextFunction): void;
 
 }
 
