@@ -3,7 +3,7 @@ import { Response, Request, NextFunction, } from 'express';
 import { IHelm, IHelmRoute } from "../types";
 import { validate } from "class-validator";
 import ValidationError from "../errors/ValidationError";
-import { HelmInstallModel, HelmUpgradeModel, HelmDeleteModel, HelmRollbackModel, HelmGetModel, HelmRepoAddModel, HelmRepoUpdateModel, HelmRegistryLoginModel, HelmCommandModel } from "../models/HelmRouteModels";
+import { HelmInstallModel, HelmUpgradeModel, HelmDeleteModel, HelmRollbackModel, HelmGetModel, HelmRepoAddModel, HelmRepoUpdateModel, HelmRegistryLoginModel, HelmCommandModel, HelmListModel } from "../models/HelmRouteModels";
 import { RouteConfig, RoutePrefix, BaseRoute } from "./BaseRoute";
 
 @injectable()
@@ -113,6 +113,21 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
                 throw new ValidationError(errors);
             }
             var result = await this.helm.repoUpdate(model.args);
+            res.status(200).send(JSON.stringify(result));
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    @RouteConfig("get", "/list")
+    async list(req: any, res: any, next: any): Promise<void> {
+        try {
+            var model = new HelmListModel(req.query);
+            var errors = await validate(model);
+            if (errors.length > 0) {
+                throw new ValidationError(errors);
+            }
+            var result = await this.helm.list(model.args);
             res.status(200).send(JSON.stringify(result));
         } catch (error) {
             next(error);

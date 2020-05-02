@@ -27,6 +27,19 @@ describe('Services: Helm', () => {
         });
     });
 
+    describe('list', () => {
+        it('should run list command and return result', async () => {
+            var helm = new Helm(execHelperStub);
+
+            var spy = execHelperStub.exec.withArgs("helm list --anything").returns(Promise.resolve({ stdout: "Success", stderr: null }));
+
+            var response = await helm.list("--anything");
+
+            expect(response).equals("Success");
+            expect(spy.calledOnce).equals(true);
+        });
+    });
+
     describe('upgrade', () => {
         it('should run upgrade command and return result', async () => {
             var helm = new Helm(execHelperStub);

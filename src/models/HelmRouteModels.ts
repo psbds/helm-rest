@@ -1,4 +1,4 @@
-import { IsNotEmpty, MaxLength } from "class-validator";
+import { IsNotEmpty, MaxLength, IsOptional } from "class-validator";
 
 
 export class HelmDefaultModel {
@@ -6,6 +6,7 @@ export class HelmDefaultModel {
         Object.assign(this, body)
     }
 
+    @IsOptional()
     @MaxLength(500)
     public args: string;
 }
@@ -110,6 +111,16 @@ export class HelmRepoUpdateModel extends HelmDefaultModel {
 
 }
 
+
+export class HelmListModel extends HelmDefaultModel {
+
+    constructor(body) {
+        super(body)
+    }
+
+}
+
+
 export class HelmRegistryLoginModel extends HelmDefaultModel {
 
     constructor(body) {
@@ -135,7 +146,7 @@ export class HelmCommandModel {
     constructor(body) {
         Object.assign(this, body)
     }
-    
+
     @MaxLength(500)
     @IsNotEmpty()
     public command: string;
