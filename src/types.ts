@@ -14,6 +14,12 @@ export interface IHelm {
 
 }
 
+export interface IKubeConfiguration {
+
+    setupKubeConfig(kubeconfigContent: string): Promise<void>;
+
+}
+
 export interface IExecHelper {
 
     exec(command: string): Promise<{ stdout: string; stderr: string; }>
@@ -21,7 +27,6 @@ export interface IExecHelper {
 }
 
 // # Routes
-
 export interface IHelmRoute extends ICustomRoute {
 
     install(req: Request, res: Response, next: NextFunction): void;
