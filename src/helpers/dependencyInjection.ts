@@ -1,5 +1,5 @@
 import "reflect-metadata";
-import { container, Lifecycle } from "tsyringe";
+import { container, DependencyContainer } from "tsyringe";
 
 import ExecHelper from "./ExecLibHelper";
 import HelmRoute from "../routes/HelmRoute";
@@ -7,23 +7,32 @@ import HelmRoute from "../routes/HelmRoute";
 import Helm from "../services/Helm";
 import KubeConfiguration from "../services/KubeConfiguration";
 
-export function setup() {
-    // Helpers
-    container.register("IExecHelper", { useClass: ExecHelper });
+export class DependencyInjection {
 
-    // Services
-    container.register("IHelm", { useClass: Helm });
-    container.register("IKubeConfiguration", { useClass: KubeConfiguration });
+    private container: DependencyContainer;
 
-    // Routes
-    container.register("IHelmRoute", { useClass: HelmRoute });
+    constructor() {
+        this.container = container;
+    }
 
-    return container;
+    setup() {
+        // Helpers
+        container.register("IExecHelper", { useClass: ExecHelper });
+
+        // Services
+        container.register("IHelm", { useClass: Helm });
+        container.register("IKubeConfiguration", { useClass: KubeConfiguration });
+
+        // Routes
+        container.register("IHelmRoute", { useClass: HelmRoute });
+    }
+
+    getContainer(): DependencyContainer {
+        return this.container;
+    }
+
 }
 
+const Instance = new DependencyInjection()
 
-export default container;
-
-export var Routes = [
-    "IHelmRoute"
-];
+export default Instance;

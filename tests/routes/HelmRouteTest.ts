@@ -6,7 +6,7 @@ import { StubbedInstance, stubInterface as StubInterface } from "ts-sinon";
 import { express } from "express";
 
 //# Imports
-import { IHelm } from "../../src/types";
+import { IHelm, ICustomRoute } from "../../src/types";
 import HelmRoute from "../../src/routes/HelmRoute";
 
 import RouteTestServer from "./_RouteTestServer";
@@ -19,9 +19,8 @@ describe('Routes: HelmRoute', () => {
     beforeEach(() => {
         helmStub = StubInterface<IHelm>();
         helmRoute = new HelmRoute(helmStub);
-        testServer = RouteTestServer.get((app) => {
-            helmRoute.configureRouter(app);
-        });
+        var routes: ICustomRoute[] = [helmRoute];
+        testServer = RouteTestServer.get(routes);
     })
 
     describe('POST /helm/install', () => {
