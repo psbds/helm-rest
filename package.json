@@ -1,0 +1,67 @@
+{
+  "name": "helm-rest",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "compile": "tsc",
+    "debug": "tsc && NODE_ENV=development node --inspect-brk --nolazy bin/index.js",
+    "start": "node bin/index.js",
+    "test": "mocha -r ts-node/register --reporter-options mochaFile=testReport/test-results.xml --reporter mocha-junit-reporter tests/**/*.ts",
+    "test-debug": "mocha -r ts-node/register --inspect-brk tests/**/*.ts",
+    "test-local": "mocha -r ts-node/register tests/**/*.ts",
+    "test-mutation": "stryker run",
+    "coverage": "tsc && nyc --all --report-dir testReport --reporter cobertura npm run test",
+    "coverage-local": "tsc && nyc --all --report-dir testReport --reporter text npm run test-local",
+    "watch": "npm-watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psbds/helm-rest.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/psbds/helm-rest/issues"
+  },
+  "homepage": "https://github.com/psbds/helm-rest#readme",
+  "dependencies": {
+    "body-parser": "1.18.2",
+    "class-validator": "^0.12.2",
+    "compression": "1.7.1",
+    "cookie-parser": "1.4.3",
+    "cors": "2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "helmet": "3.9.0",
+    "reflect-metadata": "^0.1.13",
+    "request": "^2.88.0",
+    "request-promise": "^4.2.5",
+    "tsyringe": "^4.0.1"
+  },
+  "devDependencies": {
+    "@stryker-mutator/core": "^2.4.0",
+    "@stryker-mutator/html-reporter": "^2.4.0",
+    "@stryker-mutator/mocha-framework": "^2.4.0",
+    "@stryker-mutator/mocha-runner": "^2.4.0",
+    "@stryker-mutator/typescript": "^2.4.0",
+    "@types/chai": "^4.2.5",
+    "@types/chai-as-promised": "^7.1.2",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.12.12",
+    "@types/q": "^1.5.2",
+    "@types/request-promise": "^4.1.45",
+    "@types/supertest": "^2.0.8",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^6.2.2",
+    "mocha-junit-reporter": "^1.23.1",
+    "npm-watch": "^0.6.0",
+    "nyc": "^14.1.1",
+    "sinon": "^7.5.0",
+    "supertest": "^4.0.2",
+    "ts-node": "^8.5.2",
+    "ts-sinon": "^1.0.24",
+    "typescript": "^3.7.2"
+  }
+}
