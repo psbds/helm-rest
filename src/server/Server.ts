@@ -1,8 +1,7 @@
 import * as express from 'express';
 import * as http from 'http';
 import * as serverEvents from './serverEvents';
-import { default as DISingleton } from "../helpers/dependencyInjection";
-import { DependencyInjection } from "../helpers/dependencyInjection";
+import { DependencyInjection } from "../DependencyInjection";
 
 import DefaultHandler from './handlers/DefaultHandlers';
 import ErrorHandler from './handlers/ErrorHandler';
@@ -14,9 +13,6 @@ export class Server {
     private app: express.Application;
 
     constructor(private DependencyInstance?: DependencyInjection) {
-        if (this.DependencyInstance == null) {
-            this.DependencyInstance = DISingleton;
-        }
     }
 
     startServer() {
@@ -27,8 +23,7 @@ export class Server {
     }
 
     createAppWithRoutes() {
-        var _self = this;
-        var routeHandlers = Routes.map(route => _self.DependencyInstance.getContainer().resolve<ICustomRoute>(route))
+        var routeHandlers = this.DependencyInstance.getCustomRoutes();
         this.createApp(routeHandlers);
     }
 
@@ -42,7 +37,7 @@ export class Server {
                 route.configureRouter(this.app);
             }
         }
-        
+
         NotFoundHandler(this.app);
         ErrorHandler(this.app);
 
@@ -53,7 +48,3 @@ export class Server {
         return this.app;
     }
 }
-
-const Routes = [
-    "IHelmRoute"
-];

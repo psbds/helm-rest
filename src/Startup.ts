@@ -1,9 +1,9 @@
-import { DependencyInjection } from "./helpers/dependencyInjection";
-import { default as DISingleton } from "./helpers/dependencyInjection";
+import { DependencyInjection } from "./DependencyInjection";
+import { default as DISingleton } from "./DependencyInjection";
 
 import { IKubeConfiguration } from "./types";
 const dotenv = require("dotenv");
-import { Server } from "./server/server";
+import { Server } from "./server/Server";
 
 
 export default class Startup {
@@ -22,8 +22,9 @@ export default class Startup {
             dotenv.config();
         }
 
+        this.DependencyInstance.setup();
         const container = this.DependencyInstance.getContainer();
-
+        
         var kubeConfiguration = container.resolve<IKubeConfiguration>("IKubeConfiguration");
 
         await kubeConfiguration.setupKubeConfig(process.env.kubeconfig);

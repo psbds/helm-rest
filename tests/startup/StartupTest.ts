@@ -7,10 +7,10 @@ import { StubbedInstance, stubInterface as StubInterface, } from "ts-sinon";
 //# Imports
 
 import Startup from "../../src/startup"
-import { DependencyInjection } from "../../src/helpers/dependencyInjection";
+import { DependencyInjection } from "../../src/DependencyInjection";
 import { DependencyContainer, } from "tsyringe";
 import { IKubeConfiguration } from "../../src/types";
-import { Server } from "../../src/server/server";
+import { Server } from "../../src/server/Server";
 
 describe('Startup: Startup', () => {
     beforeEach(() => {

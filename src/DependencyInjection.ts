@@ -1,11 +1,12 @@
 import "reflect-metadata";
 import { container, DependencyContainer } from "tsyringe";
 
-import ExecHelper from "./ExecLibHelper";
-import HelmRoute from "../routes/HelmRoute";
+import ExecHelper from "./helpers/ExecLibHelper";
+import HelmRoute from "./routes/HelmRoute";
 
-import Helm from "../services/Helm";
-import KubeConfiguration from "../services/KubeConfiguration";
+import Helm from "./services/Helm";
+import KubeConfiguration from "./services/KubeConfiguration";
+import { ICustomRoute } from "./types";
 
 export class DependencyInjection {
 
@@ -29,6 +30,15 @@ export class DependencyInjection {
 
     getContainer(): DependencyContainer {
         return this.container;
+    }
+
+    getCustomRoutes(): ICustomRoute[] {
+        const Routes = [
+            "IHelmRoute"
+        ];
+        var customRoutes = Routes.map(route => Instance.getContainer().resolve<ICustomRoute>(route));
+
+        return customRoutes;
     }
 
 }
