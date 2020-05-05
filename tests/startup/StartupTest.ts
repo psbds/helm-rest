@@ -6,7 +6,7 @@ import { StubbedInstance, stubInterface as StubInterface, } from "ts-sinon";
 
 //# Imports
 
-import Startup from "../../src/startup"
+import Startup from "../../src/Startup"
 import { DependencyInjection } from "../../src/DependencyInjection";
 import { DependencyContainer, } from "tsyringe";
 import { IKubeConfiguration } from "../../src/types";

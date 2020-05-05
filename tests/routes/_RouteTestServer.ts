@@ -1,5 +1,5 @@
 import { express } from "express";
-import { Server } from "../../src/server/server";
+import { Server } from "../../src/server/Server";
 import { ICustomRoute } from "../../src/types";
 
 export default class RouteTestServer {
