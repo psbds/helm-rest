@@ -10,7 +10,7 @@ export default class Helm implements IHelm {
     }
 
     async command(command: string): Promise<string> {
-        let commandResult = await this.execHelper.exec(`helm ${command ? command : ""}`.trim());
+        let commandResult = await this.execHelper.exec(`helm ${command}`.trim());
         return commandResult.stdout;
     }
 
