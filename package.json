@@ -26,6 +26,7 @@
   },
   "homepage": "https://github.com/psbds/helm-rest#readme",
   "dependencies": {
+    "@types/yamljs": "^0.2.30",
     "body-parser": "1.18.2",
     "class-validator": "^0.12.2",
     "compression": "1.7.1",
@@ -37,7 +38,9 @@
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
-    "tsyringe": "^4.0.1"
+    "swagger-ui-express": "^4.1.4",
+    "tsyringe": "^4.0.1",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "@stryker-mutator/core": "^2.4.0",

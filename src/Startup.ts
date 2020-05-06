@@ -5,7 +5,6 @@ import { IKubeConfiguration } from "./types";
 const dotenv = require("dotenv");
 import { Server } from "./server/Server";
 
-
 export default class Startup {
     constructor(private DependencyInstance?: DependencyInjection, private server?: Server) {
         if (this.DependencyInstance == null) {

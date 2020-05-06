@@ -4,6 +4,10 @@ import * as cookieParser from 'cookie-parser';
 import * as cors from 'cors';
 import * as express from 'express';
 import * as helmet from 'helmet';
+import swaggerUi from "swagger-ui-express";
+import YAML from "yamljs";
+
+const swaggerDocument = YAML.load('../../swagger.yaml');
 
 
 export default function ErrorHandler(app: express.Application) {
@@ -38,5 +42,7 @@ export default function ErrorHandler(app: express.Application) {
 	app.use((req, res, next) => {
 		res.setHeader('Content-Type', 'application/json');
 		next();
-	})
+	});
+
+	this.app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
