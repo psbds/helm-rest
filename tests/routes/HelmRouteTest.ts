@@ -255,14 +255,14 @@ describe('Routes: HelmRoute', () => {
         });
     });
 
-    describe('GET /helm/repo/update', () => {
+    describe('POST /helm/repo/update', () => {
         const PATH = '/helm/repo/update';
         it('200: should run repo update command and return result', async () => {
             var spy = helmStub.repoUpdate.withArgs("--dry-run").returns(Promise.resolve("successfull result"));
 
             var result = await request(testServer)
-                .get(PATH)
-                .query({ args: "--dry-run" })
+                .post(PATH)
+                .send({ args: "--dry-run" })
                 .expect('Content-Type', /json/)
                 .expect(200);
 
@@ -274,8 +274,8 @@ describe('Routes: HelmRoute', () => {
             var spy = helmStub.repoUpdate.throws(new Error("error result"));
 
             var result = await request(testServer)
-                .get(PATH)
-                .query({ args: "--dry-run" })
+                .post(PATH)
+                .send({ args: "--dry-run" })
                 .expect('Content-Type', /json/)
                 .expect(500);
 
