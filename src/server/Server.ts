@@ -6,6 +6,8 @@ import { DependencyInjection } from "../DependencyInjection";
 import DefaultHandler from './handlers/DefaultHandlers';
 import ErrorHandler from './handlers/ErrorHandler';
 import NotFoundHandler from './handlers/NotFoundHandler';
+import SwaggerHandler from './handlers/SwaggerHandler';
+
 import { ICustomRoute } from '../types';
 
 export class Server {
@@ -37,7 +39,7 @@ export class Server {
                 route.configureRouter(this.app);
             }
         }
-
+        SwaggerHandler(this.app);
         NotFoundHandler(this.app);
         ErrorHandler(this.app);
 

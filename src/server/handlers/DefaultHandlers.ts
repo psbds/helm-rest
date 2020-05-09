@@ -5,7 +5,6 @@ import * as cors from 'cors';
 import * as express from 'express';
 import * as helmet from 'helmet';
 
-
 export default function ErrorHandler(app: express.Application) {
 	// express middleware
 	app.use(bodyParser.urlencoded({
@@ -34,9 +33,4 @@ export default function ErrorHandler(app: express.Application) {
 		res.header('Access-Control-Allow-Credentials', 'true');
 		next();
 	});
-
-	app.use((req, res, next) => {
-		res.setHeader('Content-Type', 'application/json');
-		next();
-	})
 }

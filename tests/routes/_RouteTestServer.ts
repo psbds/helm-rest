@@ -6,6 +6,7 @@ export default class RouteTestServer {
 
 
     static get(routes: ICustomRoute[]): express.Application {
+        process.env.NODE_ENV = "test";
         const app: express.Application = new Server().createApp(routes);
         return app;
     }

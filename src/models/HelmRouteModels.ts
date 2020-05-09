@@ -11,6 +11,25 @@ export class HelmDefaultModel {
     public args: string;
 }
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     HelmInstall:
+ *      type: "object"
+ *      properties:
+ *        releaseName:
+ *          type: "string"
+ *          required: true
+ *          example: "mynginx"
+ *        chart:
+ *          type: "string"
+ *          required: true
+ *          example: "stable/nginx-ingress"
+ *        args:
+ *          type: "string"
+ *          example: "--set NGINX_PORT=80"
+*/
 export class HelmInstallModel extends HelmDefaultModel {
 
     constructor(body) {
@@ -27,6 +46,26 @@ export class HelmInstallModel extends HelmDefaultModel {
 
 }
 
+
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     HelmUpgrade:
+ *      type: "object"
+ *      properties:
+ *        releaseName:
+ *          type: "string"
+ *          required: true
+ *          example: "mynginx"
+ *        chart:
+ *          type: "string"
+ *          required: true
+ *          example: "stable/nginx-ingress"
+ *        args:
+ *          type: "string"
+ *          example: "--set NGINX_PORT=80"
+*/
 export class HelmUpgradeModel extends HelmDefaultModel {
 
     constructor(body) {
@@ -43,6 +82,21 @@ export class HelmUpgradeModel extends HelmDefaultModel {
 
 }
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     HelmDelete:
+ *      type: "object"
+ *      properties:
+ *        releaseName:
+ *          type: "string"
+ *          required: true
+ *          example: "mynginx"
+ *        args:
+ *          type: "string"
+ *          example: "--debug"
+*/
 export class HelmDeleteModel extends HelmDefaultModel {
 
     constructor(body) {
@@ -55,6 +109,25 @@ export class HelmDeleteModel extends HelmDefaultModel {
 
 }
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     HelmRollback:
+ *      type: "object"
+ *      properties:
+ *        releaseName:
+ *          type: "string"
+ *          required: true
+ *          example: "mynginx"
+ *        revision:
+ *          type: "string"
+ *          required: true
+ *          example: "0"
+ *        args:
+ *          type: "string"
+ *          example: "--wait"
+*/
 export class HelmRollbackModel extends HelmDefaultModel {
 
     constructor(body) {
@@ -71,6 +144,26 @@ export class HelmRollbackModel extends HelmDefaultModel {
 
 }
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     HelmGet:
+ *      type: "object"
+ *      properties:
+ *        subcommand:
+ *          type: "string"
+ *          enum: [all,hooks,manifest,notes,values]
+ *          required: true
+ *          example: "all"
+ *        releaseName:
+ *          type: "string"
+ *          required: true
+ *          example: "mynginx"
+ *        args:
+ *          type: "string"
+ *          example: "--debug"
+*/
 export class HelmGetModel extends HelmDefaultModel {
 
     constructor(body) {
@@ -87,6 +180,25 @@ export class HelmGetModel extends HelmDefaultModel {
 
 }
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     HelmRepoAdd:
+ *      type: "object"
+ *      properties:
+ *        repoName:
+ *          type: "string"
+ *          required: true
+ *          example: "stable"
+ *        repoUrl:
+ *          type: "string"
+ *          required: true
+ *          example: "https://kubernetes-charts.storage.googleapis.com"
+ *        args:
+ *          type: "string"
+ *          example: "--debug"
+*/
 export class HelmRepoAddModel extends HelmDefaultModel {
 
     constructor(body) {
@@ -103,6 +215,17 @@ export class HelmRepoAddModel extends HelmDefaultModel {
 
 }
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     HelmRepoUpdate:
+ *      type: "object"
+ *      properties:
+ *        args:
+ *          type: "string"
+ *          example: "--debug"
+*/
 export class HelmRepoUpdateModel extends HelmDefaultModel {
 
     constructor(body) {
@@ -111,7 +234,17 @@ export class HelmRepoUpdateModel extends HelmDefaultModel {
 
 }
 
-
+/**
+* @swagger
+* components:
+*   schemas:
+*     HelmList:
+*      type: "object"
+*      properties:
+*        args:
+*          type: "string"
+*          example: "--debug"
+*/
 export class HelmListModel extends HelmDefaultModel {
 
     constructor(body) {
@@ -120,7 +253,29 @@ export class HelmListModel extends HelmDefaultModel {
 
 }
 
-
+/**
+* @swagger
+* components:
+*   schemas:
+*     HelmRegistryLogin:
+*      type: "object"
+*      properties:
+*        host:
+*          type: "string"
+*          example: "myHost"
+*          required: true
+*        username:
+*          type: "string"
+*          example: "myUsername"
+*          required: true
+*        password:
+*          type: "string"
+*          password: "myPassword"
+*          required: true
+*        args:
+*          type: "string"
+*          example: "--debug"
+*/
 export class HelmRegistryLoginModel extends HelmDefaultModel {
 
     constructor(body) {
@@ -141,6 +296,18 @@ export class HelmRegistryLoginModel extends HelmDefaultModel {
 
 }
 
+/**
+* @swagger
+* components:
+*   schemas:
+*     HelmCommand:
+*      type: "object"
+*      properties:
+*        command:
+*          type: "string"
+*          example: "version --short"
+*          required: true
+*/
 export class HelmCommandModel {
 
     constructor(body) {
