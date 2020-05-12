@@ -6,6 +6,8 @@ import HelmRoute from "./routes/HelmRoute";
 
 import Helm from "./services/Helm";
 import KubeConfiguration from "./services/KubeConfiguration";
+import RepositoryConfiguration from "./services/RepositoryConfiguration";
+
 import { ICustomRoute } from "./types";
 
 export class DependencyInjection {
@@ -23,6 +25,7 @@ export class DependencyInjection {
         // Services
         container.register("IHelm", { useClass: Helm });
         container.register("IKubeConfiguration", { useClass: KubeConfiguration });
+        container.register("IRepositoryConfiguration", { useClass: RepositoryConfiguration });
 
         // Routes
         container.register("IHelmRoute", { useClass: HelmRoute });
