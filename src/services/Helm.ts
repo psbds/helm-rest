@@ -55,7 +55,7 @@ export default class Helm implements IHelm {
     }
 
     async registryLogin(host: string, username: string, password: string, args?: string): Promise<string> {
-        let commandResult = await this.execHelper.exec(`helm registry login ${host} --username ${username} --password ${password} ${args ? args : ""}`.trim());
+        let commandResult = await this.execHelper.exec(`export HELM_EXPERIMENTAL_OCI=1 && helm registry login ${host} --username ${username} --password ${password} ${args ? args : ""}`.trim());
         return commandResult.stdout;
     }
 
