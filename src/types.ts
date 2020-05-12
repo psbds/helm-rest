@@ -27,6 +27,12 @@ export interface IExecHelper {
 
 }
 
+export interface IRepositoryConfiguration {
+    
+    setupRepositories(repositories: string): void;
+    
+}
+
 // # Routes
 export interface IHelmRoute extends ICustomRoute {
 

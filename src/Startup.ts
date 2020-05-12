@@ -1,7 +1,7 @@
 import { DependencyInjection } from "./DependencyInjection";
 import { default as DISingleton } from "./DependencyInjection";
 
-import { IKubeConfiguration } from "./types";
+import { IKubeConfiguration, IRepositoryConfiguration } from "./types";
 const dotenv = require("dotenv");
 import { Server } from "./server/Server";
 
@@ -23,11 +23,13 @@ export default class Startup {
 
         this.DependencyInstance.setup();
         const container = this.DependencyInstance.getContainer();
-        
+
         var kubeConfiguration = container.resolve<IKubeConfiguration>("IKubeConfiguration");
+        var repositoryConfiguration = container.resolve<IRepositoryConfiguration>("IRepositoryConfiguration");
 
         await kubeConfiguration.setupKubeConfig(process.env.kubeconfig);
-
+        await repositoryConfiguration.setupRepositories(process.env.repositories);
+        
         this.server.createAppWithRoutes();
         this.server.startServer();
     }
