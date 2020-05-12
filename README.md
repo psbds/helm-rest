@@ -10,23 +10,57 @@
 [![Build Status ](https://img.shields.io/azure-devops/coverage/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/17?label=coverage%3A%20develop)](https://dev.azure.com/padasil/helm-rest/_build?definitionId=17)
 [![Build Status ](https://img.shields.io/azure-devops/coverage/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/18?label=coverage%3A%20master)](https://dev.azure.com/padasil/helm-rest/_build?definitionId=17)
 
+## Running the Project
+
+### Running using Node Debugger
+
+1. First restore node dependencies using ```npm install```
+
+2. Then, at the root of the project, create a .env file with the following content
+    ```
+    kubeconfig=<<base64stringhere>>
+    ```
+
+3. Run ```npm start```
+
+### Running with Docker locally
+
+1. At the root of the project, build the image from the Dockerfile
+    ```
+    docker build . -t helm-rest:latest
+    ```
+2. Run the docker image
+    ```
+    docker run -p 80:80 -e kubeconfig=<<base64stringhere>> helm-rest
+    ```
+
 ## Generating kubeconfig file
 
 So the web app can authenticate with your Kubernetes Services, you need to generate to create a service account, give the proper permissions and generate a kubeconfig file. Below the instructios to do so.
 
-### 0. First of all, log in into your cluster as admin
+### First of all, log in into your cluster as admin
 ```
 # Using Azure Kubernetes Service, you can do so using the following commnad
 az aks get-credentials --name myAks --resource-group myRg --admin
 ```
 
-### 1. Create the Service Account
+### Option A: Run the create_kubeconfig.bash script to create the necessary configurations
+On the root of the project, run the command: `./create_kubeconfig.bash SERVICE_ACCOUNT_NAME SERVICE_ACCOUNT_NAMESPACE`
+
+Example:
+
+```
+./create_kubeconfig.bash helm-rest default
+```
+
+### Option B: Step by Step
+#### 1. Create the Service Account
 ```
 # Create a Service Account name `helm-rest` in the default namespaces.
 kubectl create serviceaccount helm-rest -n default
 ```
 
-### 2. Create the service account permissions
+#### 2. Create the service account permissions
 ```
 # Create a Cluster Role and Cluster Role Binding with the permissions for the service account, 
 # you can edit this command to have more granular and secure set of permissions
@@ -56,7 +90,7 @@ subjects:
 EOF
 ```
 
-### 3. Create the Kubeconfig file
+#### 3. Create the Kubeconfig file
 ```
 SERVICE_ACCOUNT_NAME="helm-rest"
 SERVICE_ACCOUNT_NAMESPACE="default"
@@ -95,32 +129,23 @@ kubectl config --kubeconfig=$KUBECONFIG \
     use-context registry
 ```
 
-### 4. Genereate the Base64 string
+#### 4. Genereate the Base64 string
 ```
 KUBECONFIG=./kubeconfig
 
 cat ./kubeconfig | base64 --wrap=0
 ```
 
-### 5.1 Running on VSCode Remote Containers
-Open the devcontainer.json file and add the base64 string of the kubeconfig file in the containerEnv parameters
-```
-"containerEnv": {
-    "kubeconfig": "<<base64stringhere>>"
-}
-```
 
-### 5.2 Running using Node Debugger
-At the root of the project, create a .env file with the following content
-```
-kubeconfig=<<base64stringhere>>
-```
+## Options
 
-### 5.3 Running with Docker locally
-```
-# Build the image from the Dockerfile
-docker build . -t helm-rest:latest
+### Add Default Repositories
 
-# Run the docker image
-docker run -p 80:80 -e kubeconfig=<<base64stringhere>> helm-rest
+To add default repositories that will be setup every time the application is started, you can use the environment variable ```repositories``` following the approach below:
+
+```
+# repositories=repoName1=repoUrl1,repoName2=repoUrl2
+# Example:
+
+repositories=stable=https://kubernetes-charts.storage.googleapis.com,bitnami=https://charts.bitnami.com/bitnami
 ```
