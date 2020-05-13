@@ -215,9 +215,9 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     * /helm/registry/login:
     *   post:
     *     tags:
-    *     - "helm"
-    *     summary: "Authenticate to a remote registry."
-    *     description: "Authenticate to a remote registry."
+    *     - "experimental"
+    *     summary: "Authenticate to a remote registry (Experimental use of OCI Registry: https://helm.sh/docs/topics/registries/)."
+    *     description: "Authenticate to a remote registry (Experimental use of OCI Registry: https://helm.sh/docs/topics/registries/)."
     *     produces:
     *     - "application/json"
     *     consumes:

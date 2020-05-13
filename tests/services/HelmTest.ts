@@ -210,7 +210,7 @@ describe('Services: Helm', () => {
         it('should run registry login command with args parameter and return result', async () => {
             var helm = new Helm(execHelperStub);
 
-            var spy = execHelperStub.exec.withArgs("helm registry login host --username user --password password --anything").returns(Promise.resolve({ stdout: "Success", stderr: null }));
+            var spy = execHelperStub.exec.withArgs("export HELM_EXPERIMENTAL_OCI=1 && helm registry login host --username user --password password --anything").returns(Promise.resolve({ stdout: "Success", stderr: null }));
             var response = await helm.registryLogin("host", "user", "password", "--anything");
 
             expect(response).equals("Success");
@@ -220,7 +220,7 @@ describe('Services: Helm', () => {
         it('should run registry login command without args parameter and return result', async () => {
             var helm = new Helm(execHelperStub);
 
-            var spy = execHelperStub.exec.withArgs("helm registry login host --username user --password password").returns(Promise.resolve({ stdout: "Success", stderr: null }));
+            var spy = execHelperStub.exec.withArgs("export HELM_EXPERIMENTAL_OCI=1 && helm registry login host --username user --password password").returns(Promise.resolve({ stdout: "Success", stderr: null }));
             var response = await helm.registryLogin("host", "user", "password", null);
 
             expect(response).equals("Success");

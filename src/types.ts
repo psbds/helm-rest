@@ -33,6 +33,12 @@ export interface IRepositoryConfiguration {
     
 }
 
+export interface IRegistryConfiguration {
+    
+    setupRegistries(registries: string): void;
+    
+}
+
 // # Routes
 export interface IHelmRoute extends ICustomRoute {
 

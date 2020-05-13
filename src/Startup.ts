@@ -1,7 +1,7 @@
 import { DependencyInjection } from "./DependencyInjection";
 import { default as DISingleton } from "./DependencyInjection";
 
-import { IKubeConfiguration, IRepositoryConfiguration } from "./types";
+import { IKubeConfiguration, IRepositoryConfiguration, IRegistryConfiguration } from "./types";
 const dotenv = require("dotenv");
 import { Server } from "./server/Server";
 
@@ -26,7 +26,9 @@ export default class Startup {
 
         var kubeConfiguration = container.resolve<IKubeConfiguration>("IKubeConfiguration");
         var repositoryConfiguration = container.resolve<IRepositoryConfiguration>("IRepositoryConfiguration");
+        var registryConfiguration = container.resolve<IRegistryConfiguration>("IRegistryConfiguration");
 
+        await registryConfiguration.setupRegistries(process.env.registries);
         await kubeConfiguration.setupKubeConfig(process.env.kubeconfig);
         await repositoryConfiguration.setupRepositories(process.env.repositories);
         
