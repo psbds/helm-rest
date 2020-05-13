@@ -280,7 +280,7 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
             if (errors.length > 0) {
                 throw new ValidationError(errors);
             }
-            let result = await this.helm.repoAdd(model.repoName, model.repoUrl, model.args);
+            let result = await this.helm.repoAdd(model.repoName, model.repoUrl, model.username, model.password, model.args);
             res.status(200).json(result);
         } catch (error) {
             next(error);

@@ -159,23 +159,31 @@ describe('Services: Helm', () => {
     });
 
     describe('repoAdd', () => {
-        it('should run repo add command with args parameter and return result', async () => {
+        it('should run repo add command without args & credentials parameters and return result', async () => {
+            var spy = execHelperStub.exec.withArgs("helm repo add nginx nginx.url").returns(Promise.resolve({ stdout: "Success", stderr: null }));
+
             var helm = new Helm(execHelperStub);
-
-            var spy = execHelperStub.exec.withArgs("helm repo add nginx nginx.url --anything").returns(Promise.resolve({ stdout: "Success", stderr: null }));
-
-            var response = await helm.repoAdd("nginx", "nginx.url", "--anything");
+            var response = await helm.repoAdd("nginx", "nginx.url", null, null, null);
 
             expect(response).equals("Success");
             expect(spy.calledOnce).equals(true);
         });
 
-        it('should run repo add command without args parameter and return result', async () => {
+        it('should run repo add command with credentials parameters', async () => {
+            var spy = execHelperStub.exec.withArgs("helm repo add nginx nginx.url --username username --password password").returns(Promise.resolve({ stdout: "Success", stderr: null }));
+
             var helm = new Helm(execHelperStub);
+            var response = await helm.repoAdd("nginx", "nginx.url", "username", "password", null);
 
-            var spy = execHelperStub.exec.withArgs("helm repo add nginx nginx.url").returns(Promise.resolve({ stdout: "Success", stderr: null }));
+            expect(response).equals("Success");
+            expect(spy.calledOnce).equals(true);
+        });
 
-            var response = await helm.repoAdd("nginx", "nginx.url", null);
+        it('should run repo add command with args parameters', async () => {
+            var spy = execHelperStub.exec.withArgs("helm repo add nginx nginx.url --anything").returns(Promise.resolve({ stdout: "Success", stderr: null }));
+            
+            var helm = new Helm(execHelperStub);
+            var response = await helm.repoAdd("nginx", "nginx.url", null, null, "--anything");
 
             expect(response).equals("Success");
             expect(spy.calledOnce).equals(true);

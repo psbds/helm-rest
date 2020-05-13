@@ -23,8 +23,22 @@ describe('Services: RepositoryConfiguration', () => {
 
             var repositoryConfiguration = new RepositoryConfiguration(helmStub);
 
-            var spy = helmStub.repoAdd.withArgs("stable", "https://kubernetes-charts.storage.googleapis.com").returns(Promise.resolve("Success"));
-            var spy2 = helmStub.repoAdd.withArgs("bitnami", "https://charts.bitnami.com/bitnami").returns(Promise.resolve("Success"));
+            var spy = helmStub.repoAdd.withArgs("stable", "https://kubernetes-charts.storage.googleapis.com", null, null).returns(Promise.resolve("Success"));
+            var spy2 = helmStub.repoAdd.withArgs("bitnami", "https://charts.bitnami.com/bitnami", null, null).returns(Promise.resolve("Success"));
+
+            await repositoryConfiguration.setupRepositories(repositories);
+
+            expect(spy.calledOnce).equals(true, "Should call repo add for the first repository");
+            expect(spy2.calledOnce).equals(true, "Should call repo add for the second repository");
+        });
+
+        it('should add default repositories from environment file with credentials', async () => {
+            var repositories = "stable=https://kubernetes-charts.storage.googleapis.com,bitnami=username:password@https://charts.bitnami.com/bitnami"
+
+            var repositoryConfiguration = new RepositoryConfiguration(helmStub);
+
+            var spy = helmStub.repoAdd.withArgs("stable", "https://kubernetes-charts.storage.googleapis.com", null, null).returns(Promise.resolve("Success"));
+            var spy2 = helmStub.repoAdd.withArgs("bitnami", "https://charts.bitnami.com/bitnami", "username", "password").returns(Promise.resolve("Success"));
 
             await repositoryConfiguration.setupRepositories(repositories);
 

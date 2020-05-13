@@ -7,7 +7,7 @@ export interface IHelm {
     delete(releaseName: string, args?: string): Promise<string>;
     rollback(releaseName: string, revision: string, args?: string): Promise<string>;
     get(subcommand: string, releaseName: string, args?: string): Promise<string>;
-    repoAdd(repoName: string, repoUrl: string, args?: string): Promise<string>;
+    repoAdd(repoName: string, repoUrl: string, username: string, password: string, args?: string): Promise<string>;
     repoUpdate(args?: string): Promise<string>;
     registryLogin(host: string, username: string, password: string, args?: string): Promise<string>;
     command(command: string): Promise<string>;
@@ -28,15 +28,15 @@ export interface IExecHelper {
 }
 
 export interface IRepositoryConfiguration {
-    
+
     setupRepositories(repositories: string): void;
-    
+
 }
 
 export interface IRegistryConfiguration {
-    
+
     setupRegistries(registries: string): void;
-    
+
 }
 
 // # Routes

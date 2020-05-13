@@ -44,8 +44,8 @@ export default class Helm implements IHelm {
         return commandResult.stdout;
     }
 
-    async repoAdd(repoName: string, repoUrl: string, args?: string): Promise<string> {
-        let commandResult = await this.execHelper.exec(`helm repo add ${repoName} ${repoUrl} ${args ? args : ""}`.trim());
+    async repoAdd(repoName: string, repoUrl: string, username: string, password: string, args?: string): Promise<string> {
+        let commandResult = await this.execHelper.exec(`helm repo add ${repoName} ${repoUrl}${username ? (" --username " + username ): ""}${password ? (" --password " + password ): ""} ${args || ""}`.trim());
         return commandResult.stdout;
     }
 
