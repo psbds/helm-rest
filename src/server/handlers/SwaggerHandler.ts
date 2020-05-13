@@ -32,7 +32,7 @@ export default function SwaggerHandler(app: Application): void {
         });
 
         router.get('/', swaggerUi.setup(swaggerDoc));
-    } else if (process.env.NODE_ENV != "test") {
+    } else if (process.env.NODE_ENV != "unit-test") {
         console.log('***************************************************');
         console.log(' ')
         console.log('  Seems like you doesn\`t have swagger.json file');
