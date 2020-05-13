@@ -195,6 +195,12 @@ export class HelmGetModel extends HelmDefaultModel {
  *          type: "string"
  *          required: true
  *          example: "https://kubernetes-charts.storage.googleapis.com"
+ *        username:
+ *          type: "string"
+ *          example: "username"
+ *        password:
+ *          type: "string"
+ *          example: "password"
  *        args:
  *          type: "string"
  *          example: "--debug"
@@ -212,6 +218,14 @@ export class HelmRepoAddModel extends HelmDefaultModel {
     @MaxLength(250)
     @IsNotEmpty()
     public repoUrl: string;
+
+    @MaxLength(250)
+    @IsOptional()
+    public username: string;
+
+    @MaxLength(250)
+    @IsOptional()
+    public password: string;
 
 }
 

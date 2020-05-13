@@ -219,11 +219,11 @@ describe('Routes: HelmRoute', () => {
     describe('POST /helm/repo/add', () => {
         const PATH = '/helm/repo/add';
         it('200: should run repo add command and return result', async () => {
-            var spy = helmStub.repoAdd.withArgs("stable", "stable.com", "--dry-run").returns(Promise.resolve("successfull result"));
+            var spy = helmStub.repoAdd.withArgs("stable", "stable.com", "username", "password", "--dry-run").returns(Promise.resolve("successfull result"));
 
             var result = await request(testServer)
                 .post(PATH)
-                .send({ repoName: "stable", repoUrl: "stable.com", args: "--dry-run" })
+                .send({ repoName: "stable", repoUrl: "stable.com", username: "username", password: "password", args: "--dry-run" })
                 .expect('Content-Type', /json/)
                 .expect(200);
 
