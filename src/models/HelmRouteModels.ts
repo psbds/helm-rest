@@ -257,7 +257,7 @@ export class HelmRepoUpdateModel extends HelmDefaultModel {
 *      properties:
 *        args:
 *          type: "string"
-*          example: "--debug"
+*          example: "-o json"
 */
 export class HelmListModel extends HelmDefaultModel {
 

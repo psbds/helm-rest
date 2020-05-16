@@ -1,7 +1,9 @@
 import "reflect-metadata";
 import { injectable, inject } from "tsyringe";
-import { IHelm, IExecHelper } from "../types";
 import { Logger } from "winston";
+
+import { IHelm, IExecHelper } from "../types";
+
 @injectable()
 export default class Helm implements IHelm {
 
