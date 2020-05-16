@@ -1,6 +1,10 @@
-import Startup from "./Startup";
+import "reflect-metadata";
 
-var startup = new Startup();
+import { default as DIContainer } from "./DependencyInjection";
+import { IStartup } from "./types";
+
+DIContainer.setup();
+var startup = DIContainer.getContainer().resolve<IStartup>("IStartup")
 startup.main()
     .then(() => {
         console.log("Process exit successfully.")

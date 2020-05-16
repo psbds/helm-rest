@@ -1,32 +1,34 @@
 import * as express from 'express';
 import * as http from 'http';
-import * as serverEvents from './serverEvents';
-import { DependencyInjection } from "../DependencyInjection";
+import { injectable, inject } from "tsyringe";
+import { Logger } from 'winston';
 
+import * as serverEvents from './serverEvents';
 import DefaultHandler from './handlers/DefaultHandlers';
 import ErrorHandler from './handlers/ErrorHandler';
 import NotFoundHandler from './handlers/NotFoundHandler';
 import SwaggerHandler from './handlers/SwaggerHandler';
 
-import { ICustomRoute } from '../types';
+import { ICustomRoute, IServer } from '../types';
 
-export class Server {
+@injectable()
+export default class Server implements IServer {
 
     private app: express.Application;
 
-    constructor(private DependencyInstance?: DependencyInjection) {
+    constructor(@inject("CustomRoutes") private customRoutes: ICustomRoute[], @inject("Logger") private logger: Logger) {
     }
 
-    startServer() {
+    startServer(): void {
         const Server: http.Server = http.createServer(this.app);
         Server.listen(this.app.get('port'));
         Server.on('error', (error: Error) => serverEvents.onError(error, this.app.get('port')));
         Server.on('listening', serverEvents.onListening.bind(Server));
     }
 
-    createAppWithRoutes() {
-        var routeHandlers = this.DependencyInstance.getCustomRoutes();
-        this.createApp(routeHandlers);
+    createAppWithRoutes(): express.Application {
+        var routeHandlers = this.customRoutes;
+        return this.createApp(routeHandlers);
     }
 
     createApp(routes: ICustomRoute[]): express.Application {
@@ -39,7 +41,8 @@ export class Server {
                 route.configureRouter(this.app);
             }
         }
-        SwaggerHandler(this.app);
+
+        SwaggerHandler(this.app, this.logger);
         NotFoundHandler(this.app);
         ErrorHandler(this.app);
 

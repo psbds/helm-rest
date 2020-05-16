@@ -41,7 +41,6 @@ export interface IRegistryConfiguration {
 
 // # Routes
 export interface IHelmRoute extends ICustomRoute {
-
     install(req: Request, res: Response, next: NextFunction): void;
     upgrade(req: Request, res: Response, next: NextFunction): void;
     delete(req: Request, res: Response, next: NextFunction): void;
@@ -52,7 +51,6 @@ export interface IHelmRoute extends ICustomRoute {
     registryLogin(req: Request, res: Response, next: NextFunction): void;
     command(req: Request, res: Response, next: NextFunction): void;
     list(req: Request, res: Response, next: NextFunction): void;
-
 }
 
 export interface IRoute {
@@ -65,5 +63,20 @@ export interface ICustomRoute {
 
     routes: IRoute[];
     configureRouter(app: express.Application): Router
+
+}
+
+// Server
+export interface IServer {
+    startServer(): void;
+    createApp(routes: ICustomRoute[]): express.Application;
+    createAppWithRoutes(): express.Application;
+}
+
+// Startup
+
+export interface IStartup {
+
+    main(): Promise<void>;
 
 }

@@ -1,18 +1,16 @@
-import { DependencyInjection } from "./DependencyInjection";
-import { default as DISingleton } from "./DependencyInjection";
-
-import { IKubeConfiguration, IRepositoryConfiguration, IRegistryConfiguration } from "./types";
 const dotenv = require("dotenv");
-import { Server } from "./server/Server";
+import { injectable, inject } from "tsyringe";
 
+import { IKubeConfiguration, IRepositoryConfiguration, IRegistryConfiguration, IServer } from "./types";
+
+@injectable()
 export default class Startup {
-    constructor(private DependencyInstance?: DependencyInjection, private server?: Server) {
-        if (this.DependencyInstance == null) {
-            this.DependencyInstance = DISingleton;
-        }
-        if (this.server == null) {
-            this.server = new Server(this.DependencyInstance);
-        }
+    constructor(
+        @inject("IServer") private server: IServer,
+        @inject("IKubeConfiguration") private kubeConfiguration: IKubeConfiguration,
+        @inject("IRepositoryConfiguration") private repositoryConfiguration: IRepositoryConfiguration,
+        @inject("IRegistryConfiguration") private registryConfiguration: IRegistryConfiguration) {
+
     }
 
     async main(): Promise<void> {
@@ -21,17 +19,10 @@ export default class Startup {
             dotenv.config();
         }
 
-        this.DependencyInstance.setup();
-        const container = this.DependencyInstance.getContainer();
+        await this.registryConfiguration.setupRegistries(process.env.registries);
+        await this.kubeConfiguration.setupKubeConfig(process.env.kubeconfig);
+        await this.repositoryConfiguration.setupRepositories(process.env.repositories);
 
-        var kubeConfiguration = container.resolve<IKubeConfiguration>("IKubeConfiguration");
-        var repositoryConfiguration = container.resolve<IRepositoryConfiguration>("IRepositoryConfiguration");
-        var registryConfiguration = container.resolve<IRegistryConfiguration>("IRegistryConfiguration");
-
-        await registryConfiguration.setupRegistries(process.env.registries);
-        await kubeConfiguration.setupKubeConfig(process.env.kubeconfig);
-        await repositoryConfiguration.setupRepositories(process.env.repositories);
-        
         this.server.createAppWithRoutes();
         this.server.startServer();
     }

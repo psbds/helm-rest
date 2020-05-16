@@ -8,8 +8,9 @@ import Helm from "./services/Helm";
 import KubeConfiguration from "./services/KubeConfiguration";
 import RepositoryConfiguration from "./services/RepositoryConfiguration";
 import RegistryConfiguration from "./services/RegistryConfiguration";
-
+import Server from "./server/Server";
 import { ICustomRoute } from "./types";
+import Startup from "./Startup";
 
 export class DependencyInjection {
 
@@ -20,6 +21,12 @@ export class DependencyInjection {
     }
 
     setup() {
+        // Startup
+        container.register("IStartup", { useClass: Startup });
+
+        // Server
+        container.register("IServer", { useClass: Server });
+
         // Helpers
         container.register("IExecHelper", { useClass: ExecHelper });
         container.register("Logger", { useValue: logger })
@@ -32,21 +39,18 @@ export class DependencyInjection {
 
         // Routes
         container.register("IHelmRoute", { useClass: HelmRoute });
+
+        // Injecting Routes for Express
+        const Routes = [
+            "IHelmRoute"
+        ];
+        var customRoutes = Routes.map(route => Instance.getContainer().resolve<ICustomRoute>(route));
+        container.register("CustomRoutes", { useValue: customRoutes })
     }
 
     getContainer(): DependencyContainer {
         return this.container;
     }
-
-    getCustomRoutes(): ICustomRoute[] {
-        const Routes = [
-            "IHelmRoute"
-        ];
-        var customRoutes = Routes.map(route => Instance.getContainer().resolve<ICustomRoute>(route));
-
-        return customRoutes;
-    }
-
 }
 
 const Instance = new DependencyInjection()

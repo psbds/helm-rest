@@ -9,29 +9,27 @@ import { StubbedInstance, stubInterface as StubInterface, } from "ts-sinon";
 import Startup from "../../src/Startup"
 import { DependencyInjection } from "../../src/DependencyInjection";
 import { DependencyContainer, } from "tsyringe";
-import { IKubeConfiguration, IRepositoryConfiguration, IRegistryConfiguration } from "../../src/types";
-import { Server } from "../../src/server/Server";
+import { IKubeConfiguration, IRepositoryConfiguration, IRegistryConfiguration, IServer } from "../../src/types";
 
 describe('Startup: Startup', () => {
-    beforeEach(() => {
+    let kubeConfigurationStub: StubbedInstance<IKubeConfiguration>;
+    let repositoryConfigurationStub: StubbedInstance<IRepositoryConfiguration>;
+    let registryConfigurationStub: StubbedInstance<IRegistryConfiguration>;
+    let serverStub: StubbedInstance<IServer>;
 
+    let startup: Startup;
+
+    beforeEach(() => {
+        kubeConfigurationStub = StubInterface<IKubeConfiguration>();
+        repositoryConfigurationStub = StubInterface<IRepositoryConfiguration>();
+        registryConfigurationStub = StubInterface<IRegistryConfiguration>();
+        serverStub = StubInterface<IServer>();
+
+        startup = new Startup(serverStub, kubeConfigurationStub, repositoryConfigurationStub, registryConfigurationStub);
     })
 
     describe('install', () => {
         it('should run install command with args parameter and return result', async () => {
-
-            let dependencyInjectionStub: StubbedInstance<DependencyInjection> = StubInterface<DependencyInjection>();
-            let containerStub: StubbedInstance<DependencyContainer> = StubInterface<DependencyContainer>();
-            let kubeConfigurationStub: StubbedInstance<IKubeConfiguration> = StubInterface<IKubeConfiguration>();
-            let repositoryConfigurationStub: StubbedInstance<IRepositoryConfiguration> = StubInterface<IRepositoryConfiguration>();
-            let registryConfigurationStub: StubbedInstance<IRegistryConfiguration> = StubInterface<IRegistryConfiguration>();
-            let serverStub: StubbedInstance<Server> = StubInterface<Server>();
-
-            dependencyInjectionStub.getContainer.returns(containerStub)
-            containerStub.resolve.withArgs("IKubeConfiguration").returns(kubeConfigurationStub);
-            containerStub.resolve.withArgs("IRepositoryConfiguration").returns(repositoryConfigurationStub);
-            containerStub.resolve.withArgs("IRegistryConfiguration").returns(registryConfigurationStub);
-
             process.env.kubeconfig = "kubeconfig";
             process.env.repositories = "repositories";
             process.env.registries = "registries";
@@ -42,7 +40,6 @@ describe('Startup: Startup', () => {
             var serverStartSpy = serverStub.startServer;
             var serverCreateAppSpy = serverStub.createAppWithRoutes;
 
-            var startup = new Startup(dependencyInjectionStub, serverStub);
 
             await startup.main();
 
