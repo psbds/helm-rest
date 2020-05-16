@@ -1,11 +1,12 @@
 import "reflect-metadata";
 import { injectable, inject } from "tsyringe";
+import { Logger } from "winston";
 import { IHelm, IRepositoryConfiguration } from "../types";
 
 @injectable()
 export default class RepositoryConfiguration implements IRepositoryConfiguration {
 
-    constructor(@inject("IHelm") private helm: IHelm) {
+    constructor(@inject("IHelm") private helm: IHelm, @inject("Logger") private logger: Logger) {
 
     }
 
@@ -18,8 +19,7 @@ export default class RepositoryConfiguration implements IRepositoryConfiguration
                     throw new Error("Repository string not parseable.");
                 }
 
-                console.log(`Adding Repository: ${repositoryName} -> ${repositoryUrl}`);
-
+                this.log(`Adding Repository: ${repositoryName} -> ${repositoryUrl}`);
                 let result: string;
                 if (repositoryUrl.match(/@/g)) {
                     let { username, password, host } = this.splitCredentialsAndUrl(repositoryUrl);
@@ -27,12 +27,10 @@ export default class RepositoryConfiguration implements IRepositoryConfiguration
                 } else {
                     result = await this.helm.repoAdd(repositoryName, repositoryUrl, null, null);
                 }
-                console.log(result);
+                this.log(result);
             }
         }
     }
-
-
 
     private splitCredentialsAndUrl(hostString: string): { username: string; password: string; host: string; } {
         var [credentials, host] = hostString.split("@");
@@ -40,5 +38,9 @@ export default class RepositoryConfiguration implements IRepositoryConfiguration
         var [username, password] = credentials.split(":");
 
         return { username, password, host };
+    }
+
+    private log(logMessage: string) {
+        this.logger.log({ level: "info", message: logMessage });
     }
 }

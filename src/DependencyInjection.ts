@@ -1,6 +1,6 @@
 import "reflect-metadata";
 import { container, DependencyContainer } from "tsyringe";
-
+import logger from "./helpers/Logger";
 import ExecHelper from "./helpers/ExecLibHelper";
 import HelmRoute from "./routes/HelmRoute";
 
@@ -22,6 +22,7 @@ export class DependencyInjection {
     setup() {
         // Helpers
         container.register("IExecHelper", { useClass: ExecHelper });
+        container.register("Logger", { useValue: logger })
 
         // Services
         container.register("IHelm", { useClass: Helm });
