@@ -5,12 +5,12 @@ import 'mocha';
 import { StubbedInstance, stubInterface as StubInterface } from "ts-sinon";
 import * as chai from "chai";
 import * as chaiAsPromised from "chai-as-promised";
+import { Logger } from "winston";
 chai.use(chaiAsPromised);
 
 //# Imports
 import { IHelm } from "../../src/types";
 import RepositoryConfiguration from "../../src/services/RepositoryConfiguration";
-import { Logger, loggers } from "winston";
 
 describe('Services: RepositoryConfiguration', () => {
     let helmStub: StubbedInstance<IHelm>;

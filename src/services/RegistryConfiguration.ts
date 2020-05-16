@@ -1,27 +1,37 @@
 import "reflect-metadata";
 import { injectable, inject } from "tsyringe";
+import { Logger } from "winston";
 import { IHelm, IRegistryConfiguration } from "../types";
 
 @injectable()
 export default class RegistryConfiguration implements IRegistryConfiguration {
 
-    constructor(@inject("IHelm") private helm: IHelm) {
+    constructor(@inject("IHelm") private helm: IHelm, @inject("Logger") private logger: Logger) {
 
     }
 
-    async setupRegistries(registryies: string) {
-        if (registryies) {
-            var registryList = registryies.split(",");
+    async setupRegistries(registries: string) {
+        if (registries) {
+            var registryList = registries.split(",");
             for (var registry of registryList) {
                 var [credentials, registryUrl] = registry.split("=");
-                var [registryUsername, registryPassword] = credentials.split(":");
-                if (!registryUsername || !registryPassword || !registryUrl) {
+                var { username, password } = this.getCredentials(credentials);
+                if (!username || !password || !registryUrl) {
                     throw new Error("Registry string not parseable.");
                 }
-                console.log(`Adding Repository: ${registryUsername} -> ${registryUrl}`);
-                var result = await this.helm.registryLogin(registryUrl, registryUsername, registryPassword);
-                console.log(result);
+                this.log(`Adding Registry: ${username} -> ${registryUrl}`);
+                var result = await this.helm.registryLogin(registryUrl, username, password);
+                this.log(result);
             }
         }
+    }
+
+    private getCredentials(credentialString: string): { username: string; password: string; } {
+        var [username, password] = credentialString.split(":")
+        return { username, password };
+    }
+
+    private log(logMessage: string) {
+        this.logger.log({ level: "info", message: logMessage });
     }
 }

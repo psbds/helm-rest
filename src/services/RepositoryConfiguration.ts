@@ -1,7 +1,7 @@
 import "reflect-metadata";
 import { injectable, inject } from "tsyringe";
-import { IHelm, IRepositoryConfiguration } from "../types";
 import { Logger } from "winston";
+import { IHelm, IRepositoryConfiguration } from "../types";
 
 @injectable()
 export default class RepositoryConfiguration implements IRepositoryConfiguration {
