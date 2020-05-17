@@ -27,7 +27,6 @@ export function createApp(configureRoutes: (app: express.Application) => any): e
 }
 
 export function startServer() {
-
     const app: express.Application = createApp((app) => {
         for (var route of Routes) {
             container.resolve<ICustomRoute>(route).configureRouter(app);
