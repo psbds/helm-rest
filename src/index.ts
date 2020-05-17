@@ -1,24 +1,11 @@
-import { setup } from "./helpers/dependencyInjection";
-import { startServer } from "./server/Server";
-import { IKubeConfiguration } from "./types";
-const dotenv = require("dotenv");
+import "reflect-metadata";
 
-async function startup(): Promise<void> {
-    console.log(`Starting process using NODE_ENV: ${process.env.NODE_ENV}`);
-    if (process.env.NODE_ENV == "development") {
-        dotenv.config();
-    }
+import { default as DIContainer } from "./DependencyInjection";
+import { IStartup } from "./types";
 
-    const container = setup();
-
-    var kubeConfiguration = container.resolve<IKubeConfiguration>("IKubeConfiguration");
-
-    await kubeConfiguration.setupKubeConfig(process.env.kubeconfig);
-
-    startServer();
-}
-
-startup()
+DIContainer.setup();
+var startup = DIContainer.getContainer().resolve<IStartup>("IStartup")
+startup.main()
     .then(() => {
         console.log("Process exit successfully.")
     })

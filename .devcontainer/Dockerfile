@@ -10,9 +10,9 @@ FROM mcr.microsoft.com/vscode/devcontainers/typescript-node:0-12
 RUN cd ~ \
     && mkdir Downloads
 
-# Install kubectl latest release
+# Install kubectl v1.18.2
 RUN cd ~/Downloads \
-    && curl -LO https://storage.googleapis.com/kubernetes-release/release/`curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt  --insecure`/bin/linux/amd64/kubectl --insecure \
+    && curl -LO https://storage.googleapis.com/kubernetes-release/release/v1.18.2/bin/linux/amd64/kubectl --insecure \
     && chmod +x ./kubectl \
     && sudo mv ./kubectl /usr/local/bin/kubectl
 

@@ -1,41 +1,55 @@
 import * as express from 'express';
 import * as http from 'http';
-import * as serverEvents from './serverEvents';
+import { injectable, inject } from "tsyringe";
+import { Logger } from 'winston';
 
+import * as serverEvents from './serverEvents';
 import DefaultHandler from './handlers/DefaultHandlers';
 import ErrorHandler from './handlers/ErrorHandler';
 import NotFoundHandler from './handlers/NotFoundHandler';
-import container, { Routes } from "../helpers/dependencyInjection";
-import { ICustomRoute } from '../types';
+import SwaggerHandler from './handlers/SwaggerHandler';
 
-export function createApp(configureRoutes: (app: express.Application) => any): express.Application {
-    const app: express.Application = express();
+import { ICustomRoute, IServer } from '../types';
 
-    DefaultHandler(app);
+@injectable()
+export default class Server implements IServer {
 
-    if (configureRoutes)
-        configureRoutes(app);
+    private app: express.Application;
 
-    NotFoundHandler(app);
-    ErrorHandler(app);
+    constructor(@inject("CustomRoutes") private customRoutes: ICustomRoute[], @inject("Logger") private logger: Logger) {
+    }
 
-    // App Settings
-    app.set('port', process.env.PORT || 80);
-    app.set('secret', process.env.SECRET || 'superSecret');
+    startServer(): void {
+        const Server: http.Server = http.createServer(this.app);
+        Server.listen(this.app.get('port'));
+        Server.on('error', (error: Error) => serverEvents.onError(error, this.app.get('port')));
+        Server.on('listening', serverEvents.onListening.bind(Server));
+    }
 
-    return app;
-}
+    createAppWithRoutes(): express.Application {
+        var routeHandlers = this.customRoutes;
+        return this.createApp(routeHandlers);
+    }
 
-export function startServer() {
-    const app: express.Application = createApp((app) => {
-        for (var route of Routes) {
-            container.resolve<ICustomRoute>(route).configureRouter(app);
+    createApp(routes: ICustomRoute[]): express.Application {
+        this.app = express();
+
+        DefaultHandler(this.app);
+
+        if (routes && routes.length > 0) {
+            for (var route of routes) {
+                route.configureRouter(this.app);
+            }
         }
-    });
-    const Server: http.Server = http.createServer(app);
 
-    Server.listen(app.get('port'));
+        SwaggerHandler(this.app, this.logger);
+        NotFoundHandler(this.app);
+        ErrorHandler(this.app);
 
-    Server.on('error', (error: Error) => serverEvents.onError(error, app.get('port')));
-    Server.on('listening', serverEvents.onListening.bind(Server));
+        // App Settings
+        this.app.set('port', process.env.PORT || 80);
+        this.app.set('secret', process.env.SECRET || 'superSecret');
+
+        return this.app;
+    }
 }

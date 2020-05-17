@@ -7,7 +7,7 @@ export interface IHelm {
     delete(releaseName: string, args?: string): Promise<string>;
     rollback(releaseName: string, revision: string, args?: string): Promise<string>;
     get(subcommand: string, releaseName: string, args?: string): Promise<string>;
-    repoAdd(repoName: string, repoUrl: string, args?: string): Promise<string>;
+    repoAdd(repoName: string, repoUrl: string, username: string, password: string, args?: string): Promise<string>;
     repoUpdate(args?: string): Promise<string>;
     registryLogin(host: string, username: string, password: string, args?: string): Promise<string>;
     command(command: string): Promise<string>;
@@ -27,9 +27,20 @@ export interface IExecHelper {
 
 }
 
+export interface IRepositoryConfiguration {
+
+    setupRepositories(repositories: string): void;
+
+}
+
+export interface IRegistryConfiguration {
+
+    setupRegistries(registries: string): void;
+
+}
+
 // # Routes
 export interface IHelmRoute extends ICustomRoute {
-
     install(req: Request, res: Response, next: NextFunction): void;
     upgrade(req: Request, res: Response, next: NextFunction): void;
     delete(req: Request, res: Response, next: NextFunction): void;
@@ -40,7 +51,6 @@ export interface IHelmRoute extends ICustomRoute {
     registryLogin(req: Request, res: Response, next: NextFunction): void;
     command(req: Request, res: Response, next: NextFunction): void;
     list(req: Request, res: Response, next: NextFunction): void;
-
 }
 
 export interface IRoute {
@@ -53,5 +63,20 @@ export interface ICustomRoute {
 
     routes: IRoute[];
     configureRouter(app: express.Application): Router
+
+}
+
+// Server
+export interface IServer {
+    startServer(): void;
+    createApp(routes: ICustomRoute[]): express.Application;
+    createAppWithRoutes(): express.Application;
+}
+
+// Startup
+
+export interface IStartup {
+
+    main(): Promise<void>;
 
 }
