@@ -1,5 +1,5 @@
 import { express, } from "express";
-import { createApp } from "../../src/server/server";
+import { createApp } from "../../src/server/Server";
 
 export default class RouteTestServer {
 

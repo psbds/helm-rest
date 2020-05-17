@@ -1,5 +1,5 @@
 import { setup } from "./helpers/dependencyInjection";
-import { startServer } from "./server/server";
+import { startServer } from "./server/Server";
 import { IKubeConfiguration } from "./types";
 const dotenv = require("dotenv");
 
