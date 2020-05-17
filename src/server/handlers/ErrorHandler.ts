@@ -8,10 +8,11 @@ export default function ErrorHandler(app: Application): void {
         if (error instanceof HttpError) {
             httpError = error;
         } else {
-            var isDev = app.get('env') === 'development';
-            httpError = new HttpError(500, isDev ? error.message : null, (<any>error).validation);
+            httpError = new HttpError(500, error.message, (<any>error).validation);
         }
-
+        if (process.env.NODE_ENV != "unit-test") {
+            console.error(error);
+        }
         sendHttpErrorModule(httpError, req, res, next);
         next();
     });

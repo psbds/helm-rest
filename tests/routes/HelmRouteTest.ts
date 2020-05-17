@@ -6,7 +6,7 @@ import { StubbedInstance, stubInterface as StubInterface } from "ts-sinon";
 import { express } from "express";
 
 //# Imports
-import { IHelm } from "../../src/types";
+import { IHelm, ICustomRoute } from "../../src/types";
 import HelmRoute from "../../src/routes/HelmRoute";
 
 import RouteTestServer from "./_RouteTestServer";
@@ -19,9 +19,8 @@ describe('Routes: HelmRoute', () => {
     beforeEach(() => {
         helmStub = StubInterface<IHelm>();
         helmRoute = new HelmRoute(helmStub);
-        testServer = RouteTestServer.get((app) => {
-            helmRoute.configureRouter(app);
-        });
+        var routes: ICustomRoute[] = [helmRoute];
+        testServer = RouteTestServer.get(routes);
     })
 
     describe('POST /helm/install', () => {
@@ -220,11 +219,11 @@ describe('Routes: HelmRoute', () => {
     describe('POST /helm/repo/add', () => {
         const PATH = '/helm/repo/add';
         it('200: should run repo add command and return result', async () => {
-            var spy = helmStub.repoAdd.withArgs("stable", "stable.com", "--dry-run").returns(Promise.resolve("successfull result"));
+            var spy = helmStub.repoAdd.withArgs("stable", "stable.com", "username", "password", "--dry-run").returns(Promise.resolve("successfull result"));
 
             var result = await request(testServer)
                 .post(PATH)
-                .send({ repoName: "stable", repoUrl: "stable.com", args: "--dry-run" })
+                .send({ repoName: "stable", repoUrl: "stable.com", username: "username", password: "password", args: "--dry-run" })
                 .expect('Content-Type', /json/)
                 .expect(200);
 
@@ -256,14 +255,14 @@ describe('Routes: HelmRoute', () => {
         });
     });
 
-    describe('GET /helm/repo/update', () => {
+    describe('POST /helm/repo/update', () => {
         const PATH = '/helm/repo/update';
         it('200: should run repo update command and return result', async () => {
             var spy = helmStub.repoUpdate.withArgs("--dry-run").returns(Promise.resolve("successfull result"));
 
             var result = await request(testServer)
-                .get(PATH)
-                .query({ args: "--dry-run" })
+                .post(PATH)
+                .send({ args: "--dry-run" })
                 .expect('Content-Type', /json/)
                 .expect(200);
 
@@ -275,8 +274,8 @@ describe('Routes: HelmRoute', () => {
             var spy = helmStub.repoUpdate.throws(new Error("error result"));
 
             var result = await request(testServer)
-                .get(PATH)
-                .query({ args: "--dry-run" })
+                .post(PATH)
+                .send({ args: "--dry-run" })
                 .expect('Content-Type', /json/)
                 .expect(500);
 

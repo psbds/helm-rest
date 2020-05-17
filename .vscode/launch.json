@@ -23,6 +23,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
+            "outputCapture": "std"
         },
         {
             "type": "node",
@@ -43,6 +44,7 @@
             "skipFiles": [
                 "<node_internals>/**"
             ],
+            "outputCapture": "std"
         }
     ]
 }

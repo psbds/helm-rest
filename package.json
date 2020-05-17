@@ -1,11 +1,11 @@
 {
   "name": "helm-rest",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
-    "compile": "tsc",
-    "debug": "tsc && NODE_ENV=development node --inspect-brk --nolazy bin/index.js",
+    "compile": "tsc && npm run-script swagger",
+    "debug": "npm run-script compile && NODE_ENV=development node --inspect-brk --nolazy bin/index.js",
     "start": "node bin/index.js",
     "test": "mocha -r ts-node/register --reporter-options mochaFile=testReport/test-results.xml --reporter mocha-junit-reporter tests/**/*.ts",
     "test-debug": "mocha -r ts-node/register --inspect-brk tests/**/*.ts",
@@ -13,6 +13,7 @@
     "test-mutation": "stryker run",
     "coverage": "tsc && nyc --all --report-dir testReport --reporter cobertura npm run test",
     "coverage-local": "tsc && nyc --all --report-dir testReport --reporter text npm run test-local",
+    "swagger": "swagger-jsdoc -d swaggerDef.js -o bin/swagger.json",
     "watch": "npm-watch"
   },
   "repository": {
@@ -37,9 +38,13 @@
     "reflect-metadata": "^0.1.13",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
-    "tsyringe": "^4.0.1"
+    "swagger-jsdoc": "3.2.7",
+    "swagger-ui-express": "^4.1.4",
+    "tsyringe": "^4.0.1",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
+    "@types/yamljs": "^0.2.30",
     "@stryker-mutator/core": "^2.4.0",
     "@stryker-mutator/html-reporter": "^2.4.0",
     "@stryker-mutator/mocha-framework": "^2.4.0",
