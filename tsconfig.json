@@ -9,7 +9,9 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
+  
   "exclude": [
+    "e2e",
     "tests",
     "node_modules"
   ]

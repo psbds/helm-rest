@@ -45,6 +45,27 @@
                 "<node_internals>/**"
             ],
             "outputCapture": "std"
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "E2E",
+            "cwd": "${workspaceFolder}",
+            "runtimeExecutable": "npm",
+            "runtimeArgs": [
+                "run-script",
+                "test-e2e-debug"
+            ],
+            "port": 9229,
+            "outFiles": [
+                "${workspaceRoot}/bin"
+            ],
+            "sourceMaps": true,
+            "timeout": 30000,
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "outputCapture": "std"
         }
     ]
 }
