@@ -110,3 +110,4 @@ testReport
 .nyc_output
 .stryker-tmp
 stryker.log
+kubeconfig
