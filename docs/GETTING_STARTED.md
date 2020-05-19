@@ -44,4 +44,4 @@ TBD
 
 ## Available Commands
 
-You can find all available commands and parameters [here](./docs/API_DOCS.md) or navigating to the home page of the web server, where you will find a Swagger UI.
+You can find all available commands and parameters [here](./API_DOCS.md) or navigating to the home page of the web server, where you will find a Swagger UI.
