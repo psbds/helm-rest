@@ -13,8 +13,7 @@
     "test-mutation": "stryker run",
     "coverage": "tsc && nyc --all --report-dir testReport --reporter cobertura npm run test",
     "coverage-local": "tsc && nyc --all --report-dir testReport --reporter text npm run test-local",
-    "swagger": "swagger-jsdoc -d swaggerDef.js -o bin/swagger.json",
-    "watch": "npm-watch"
+    "swagger": "swagger-jsdoc -d swaggerDef.js -o bin/swagger.json"
   },
   "repository": {
     "type": "git",
