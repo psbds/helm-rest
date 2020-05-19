@@ -10,149 +10,29 @@
 [![Build Status ](https://img.shields.io/azure-devops/coverage/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/17?label=coverage%3A%20develop)](https://dev.azure.com/padasil/helm-rest/_build?definitionId=17)
 [![Build Status ](https://img.shields.io/azure-devops/coverage/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/18?label=coverage%3A%20master)](https://dev.azure.com/padasil/helm-rest/_build?definitionId=17)
 
-## Running the Project
+Web Application to enable to run helm commands using REST
 
-### Running using Node Debugger
+* [Getting Started](./docs/GETTING_STARTED.md)
+* [Contributing](./docs/CONTRIBUTING.md)
+* [API Docs](./docs/API_DOCS.md)
 
-1. First restore node dependencies using ```npm install```
+## Examples
 
-2. Then, at the root of the project, create a .env file with the following content
-    ```
-    kubeconfig=<<base64stringhere>>
-    ```
-
-3. Run ```npm start```
-
-### Running with Docker locally
-
-1. At the root of the project, build the image from the Dockerfile
-    ```
-    docker build . -t helm-rest:latest
-    ```
-2. Run the docker image
-    ```
-    docker run -p 80:80 -e kubeconfig=<<base64stringhere>> helm-rest
-    ```
-
-## Generating kubeconfig file
-
-So the web app can authenticate with your Kubernetes Services, you need to generate to create a service account, give the proper permissions and generate a kubeconfig file. Below the instructios to do so.
-
-### First of all, log in into your cluster as admin
+### Installing a Helm Chart
 ```
-# Using Azure Kubernetes Service, you can do so using the following commnad
-az aks get-credentials --name myAks --resource-group myRg --admin
+# Request
+curl -X POST 'http://localhost:80/helm/install' --header 'Content-Type: application/json' --data-raw '{ "releaseName": "ingress", "chart": "stable/nginx-ingress", "args": "--set controller.replicaCount=2" }'
+
+# Response
+"NAME: ingress\nLAST DEPLOYED: Tue May 19 08:27:25 2020\nNAMESPACE: default\nSTATUS: deployed\nREVISION: 1\nTEST SUITE: None\nNOTES:\nThe nginx-ingress controller has been installed.\nIt may take a few minutes for the LoadBalancer IP to be available.\nYou can watch the status by running 'kubectl --namespace default get services -o wide -w ingress-nginx-ingress-controller'\n\nAn example Ingress that makes use of the controller:\n\n  apiVersion: extensions/v1beta1\n  kind: Ingress\n  metadata:\n    annotations:\n      kubernetes.io/ingress.class: nginx\n    name: example\n    namespace: foo\n  spec:\n    rules:\n      - host: www.example.com\n        http:\n          paths:\n            - backend:\n                serviceName: exampleService\n                servicePort: 80\n              path: /\n    # This section is only required if TLS is to be enabled for the Ingress\n    tls:\n        - hosts:\n            - www.example.com\n          secretName: example-tls\n\nIf TLS is enabled for the Ingress, a Secret containing the certificate and key must also be provided:\n\n  apiVersion: v1\n  kind: Secret\n  metadata:\n    name: example-tls\n    namespace: foo\n  data:\n    tls.crt: <base64 encoded cert>\n    tls.key: <base64 encoded key
 ```
 
-### Option A: Run the create_kubeconfig.bash script to create the necessary configurations
-On the root of the project, run the command: `./create_kubeconfig.bash SERVICE_ACCOUNT_NAME SERVICE_ACCOUNT_NAMESPACE`
-
-Example:
-
+### Listing Helm Charts
 ```
-./create_kubeconfig.bash helm-rest default
-```
+# Request
+curl -X GET 'http://localhost:81/helm/list?args=-o%20json'
 
-### Option B: Step by Step
-#### 1. Create the Service Account
-```
-# Create a Service Account name `helm-rest` in the default namespaces.
-kubectl create serviceaccount helm-rest -n default
-```
-
-#### 2. Create the service account permissions
-```
-# Create a Cluster Role and Cluster Role Binding with the permissions for the service account, 
-# you can edit this command to have more granular and secure set of permissions
-
-cat <<EOF | kubectl apply -f -
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRole
-metadata:
-  name: helm-rest-role
-rules:
-- apiGroups: ["*"]
-  resources: ["*"]
-  verbs: ["*"]
----
-apiVersion: rbac.authorization.k8s.io/v1beta1
-kind: ClusterRoleBinding
-metadata:
-  name: helm-rest-binding
-roleRef:
-  apiGroup: rbac.authorization.k8s.io
-  kind: ClusterRole
-  name: helm-rest-role
-subjects:
-- kind: ServiceAccount
-  name: helm-rest
-  namespace: default
-EOF
-```
-
-#### 3. Create the Kubeconfig file
-```
-SERVICE_ACCOUNT_NAME="helm-rest"
-SERVICE_ACCOUNT_NAMESPACE="default"
-SA_SECRET=$( kubectl get sa -n $SERVICE_ACCOUNT_NAMESPACE $SERVICE_ACCOUNT_NAME -o jsonpath='{.secrets[0].name}' )
-
-# Pull the bearer token and cluster CA from the service account secret.
-BEARER_TOKEN=$( kubectl get secrets -n $SERVICE_ACCOUNT_NAMESPACE $SA_SECRET -o jsonpath='{.data.token}' | base64 -d )
-
-# Get Certificate File
-CERTIFICATE=$(kubectl get secrets -n default $SA_SECRET -o jsonpath='{.data.ca\.crt}')
-
-# Get Cluster Url
-CURRENT_CONTEXT=$(kubectl config current-context)
-CURRENT_CLUSTER=$(kubectl config view -o jsonpath="{.contexts[?(@.name == \"$CURRENT_CONTEXT\")].context.cluster}")
-CLUSTER_URL=$(kubectl config view -o jsonpath="{.clusters[?(@.name == \"$CURRENT_CLUSTER\")].cluster.server}")
-
-# Generate KubeConfig File
-KUBECONFIG=./kubeconfig
-kubectl config --kubeconfig=$KUBECONFIG \
-    set-cluster \
-    $CLUSTER_URL \
-    --server=$CLUSTER_URL 
-
-kubectl config --kubeconfig=$KUBECONFIG \
-    set clusters.$CLUSTER_URL.certificate-authority-data $CERTIFICATE
-
-kubectl config --kubeconfig=$KUBECONFIG \
-    set-credentials $SERVICE_ACCOUNT_NAME --token=$BEARER_TOKEN
-
-kubectl config --kubeconfig=$KUBECONFIG \
-    set-context registry \
-    --cluster=$CLUSTER_URL \
-    --user=$SERVICE_ACCOUNT_NAME
-
-kubectl config --kubeconfig=$KUBECONFIG \
-    use-context registry
-```
-
-#### 4. Genereate the Base64 string
-```
-KUBECONFIG=./kubeconfig
-
-cat ./kubeconfig | base64 --wrap=0
-```
-
-
-## Options
-
-### Add Default Repositories
-
-To add default repositories that will be setup every time the application is started, you can use the environment variable ```repositories``` following the approach below:
-
-```
-# Enviroment Variable: repositories
-# Format for Public Repos:  name=url
-# Format for Private Repos: name=username:password@url
-# Example:
-
-repositories=stable=https://kubernetes-charts.storage.googleapis.com,bitnami=https://charts.bitnami.com/bitnami
-
-# or
-
-repositories=myPrivateRepo=myUsername:myPassword@https://privateRepo.com,myPrivateRepo2=myUsername:myPassword@https://privateRepo2.com
+# Response
+"[{\"name\":\"ingress\",\"namespace\":\"default\",\"revision\":\"1\",\"updated\":\"2020-05-19 08:27:25.9591898 +0000 UTC\",\"status\":\"deployed\",\"chart\":\"nginx-ingress-1.37.0\",\"app_version\":\"0.32.0\"}]"
 ```
 
