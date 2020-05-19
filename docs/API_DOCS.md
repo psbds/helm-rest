@@ -4,27 +4,34 @@
 
 * [Install](#Install)
 * [Get](#Get)
+* [List](#List)
+* [Upgrade](#Upgrade)
+* [Delete](#Delete)
+* [Rollback](#Rollback)
+* [Repo Add](#Repo-Add)
+* [Repo Update](#Repo-Update)
+* [Command](#Command)
 
 ### Install
 
 [Helm Docs](https://helm.sh/docs/helm/helm_install)
 
-Path: ```/helm/install```
+**Path:** ```/helm/install```
 
-Method: ```POST```
+**Method:** ```POST```
 
-Headers: 
+**Headers:**
 * ```Content-Type: application/json```
 
-Body Parameters:
+**Body Parameters:**
 
 |Parameter     |Type      |Required |Example |Description
-|---           |---       |---      |--- |---
+|---           |---       |---      |---     |---
 |releaseName   |string    |true     |```ingress``` |Release name of the chart to be installed.
 |chart         |string    |true     |```stable/ingress-controller``` |Name of the chart to be installed.
 |args          |string    |false    |```--set controller.replicaCount=2``` |Additional arguments to the helm install command
 
-Example:
+**Example:**
 
 ```curl -X POST 'http://localhost:80/helm/install' --header 'Content-Type: application/json' --data-raw '{ "releaseName": "ingress", "chart": "stable/nginx-ingress", "args": "--set controller.replicaCount=2" }'```
 
@@ -33,25 +40,180 @@ Example:
 
 [Helm Docs](https://helm.sh/docs/helm/helm_get_all)
 
-Path: ```/helm/get```
+**Path:** ```/helm/get```
 
-Method: ```GET```
+**Method:** ```GET```
 
-Headers: 
+**Headers:**
 * ```Content-Type: application/json```
 
-Query Parameters:
+**Query Parameters:**
 
 |Parameter     |Type      |Required |Example |Description
-|---           |---       |---      |--- |---
+|---           |---       |---      |---     |---
 |subcommand    |string    |true     |```all``` |Subcommand of the helm get command. Options: ```all,hooks,manifest,notes,values```.
 |releaseName   |string    |true     |```ingress``` |Release name of the chart to be get.
-|args          |string    |false    |```--template "{ \"Release:\": \"{{.Release.Name}}\"}"``` |Additional arguments to the helm install command
+|args          |string    |false    |```--template "{ \"Release:\": \"{{.Release.Name}}\"}"``` |Additional arguments to the helm get command
 
-Example:
+**Example:**
 
-```curl -X GET 'http://localhost:81/helm/get?subcommand=all&releaseName=ingress&args=--template%20%22{%20\%22Release:\%22:%20\%22{{.Release.Name}}\%22}%22'```
+```curl -X GET 'http://localhost:80/helm/get?subcommand=all&releaseName=ingress&args=--template%20%22{%20\%22Release:\%22:%20\%22{{.Release.Name}}\%22}%22' --header 'Content-Type: application/json' ```
 
+### List
+
+[Helm Docs](https://helm.sh/docs/helm/helm_list)
+
+**Path:** ```/helm/list```
+
+**Method:** ```GET```
+
+**Headers:**
+* ```Content-Type: application/json```
+
+**Query Parameters:**
+
+|Parameter     |Type      |Required |Example |Description
+|---           |---       |---      |---     |---
+|args          |string    |false    |```-o json``` |Additional arguments to the helm list command
+
+**Example:**
+
+```curl -X GET 'http://localhost:80/helm/list?args=-o%20json' --header 'Content-Type: application/json'```
+
+### Upgrade
+
+[Helm Docs](https://helm.sh/docs/helm/helm_list)
+
+**Path:** ```/helm/upgrade```
+
+**Method:** ```PUT```
+
+**Headers:**
+* ```Content-Type: application/json```
+
+**Body Parameters:**
+
+|Parameter     |Type      |Required |Example |Description
+|---           |---       |---      |---     |---
+|releaseName   |string    |true     |```ingress``` |Release name of the chart to be upgraded.
+|chart         |string    |true     |```stable/ingress-controller``` |Name of the chart to be upgraded.
+|args          |string    |false    |```--set controller.replicaCount=3``` |Additional arguments to the helm upgrade command
+
+**Example:**
+
+```curl -X PUT 'http://localhost:80/helm/upgrade' --header 'Content-Type: application/json' --data-raw '{ "releaseName": "ingress", "chart": "stable/nginx-ingress", "args": "--set controller.replicaCount=3" }'```
+
+### Delete
+
+[Helm Docs](https://helm.sh/docs/helm/https://helm.sh/docs/helm/helm_uninstall/#helm)
+
+**Path:** ```/helm/delete```
+
+**Method:** ```GET```
+
+**Headers:**
+* ```Content-Type: application/json```
+
+**Query Parameters:**
+
+|Parameter     |Type      |Required |Example |Description
+|---           |---       |---      |---     |---
+|releaseName   |string    |true     |```ingress``` |Release name of the chart to be deleted.
+|args          |string    |false    |```--dry-run``` |Additional arguments to the helm delete command
+
+**Example:**
+
+```curl -X DELETE 'http://localhost:80/helm/delete?releaseName=ingress&args=--dry-run' --header 'Content-Type: application/json' ```
+
+### Rollback
+
+[Helm Docs](https://helm.sh/docs/helm/helm_rollback)
+
+**Path:** ```/helm/rollback```
+
+**Method:** ```PUT```
+
+**Headers:**
+* ```Content-Type: application/json```
+
+**Body Parameters:**
+
+|Parameter     |Type      |Required |Example |Description
+|---           |---       |---      |---     |---
+|releaseName   |string    |true     |```ingress```|Release name of the chart to be rolled back.
+|revision      |string    |true     |```0```      |Revision (version) number.
+|args          |string    |false    |```--wait``` |Additional arguments to the helm rollback command
+
+**Example:**
+
+```curl -X PUT 'http://localhost:80/helm/rollback' --header 'Content-Type: application/json' --data-raw '{ "releaseName": "ingress", "revision": "0", "args": "--wait" }'```
+
+### Repo Add
+
+[Helm Docs](https://helm.sh/docs/helm/helm_repo_add)
+
+**Path:** ```/helm/repo/add```
+
+**Method:** ```POST```
+
+**Headers:**
+* ```Content-Type: application/json```
+
+**Body Parameters:**
+
+|Parameter     |Type      |Required |Example |Description
+|---           |---       |---      |---     |---
+|repoName      |string    |true     |```stable``` |Name of the repo to be added
+|repoUrl       |string    |true     |```https://kubernetes-charts.storage.googleapis.com``` |Url of the repo to be added
+|username      |string    |false    |```myUsername``` |Username of to login if it's a private repo.
+|password      |string    |false    |```myPassword``` |Password of to login if it's a private repo.
+|args          |string    |false    |```--debug``` |Additional arguments to the helm repo add command
+
+**Example:**
+
+```curl -X POST 'http://localhost:80/helm/repo/add' --header 'Content-Type: application/json' --data-raw '{ "repoName": "stable", "repoUrl": "https://kubernetes-charts.storage.googleapis.com", "username": "myUsername", "password": "myPassword", "args": "--debug"}'```
+
+### Repo Update
+
+[Helm Docs](https://helm.sh/docs/helm/helm_repo_update)
+
+**Path:** ```/helm/repo/update```
+
+**Method:** ```POST```
+
+**Headers:**
+* ```Content-Type: application/json```
+
+**Body Parameters:**
+
+|Parameter     |Type      |Required |Example |Description
+|---           |---       |---      |---     |---
+|args          |string    |false    |```--debug``` |Additional arguments to the helm repo update command
+
+**Example:**
+
+```curl -X POST 'http://localhost:80/helm/repo/update' --header 'Content-Type: application/json' --data-raw '{ "args": "--debug" }```
+
+### Command
+
+Command is the current Jack of all trades, to use commands that are not available as API yet.
+
+**Path:** ```/helm/command```
+
+**Method:** ```POST```
+
+**Headers:**
+* ```Content-Type: application/json```
+
+**Body Parameters:**
+
+|Parameter     |Type      |Required |Example |Description
+|---           |---       |---      |---     |---
+|command       |string    |true     |```version``` |Helm Command to be executed
+
+**Example:**
+
+```curl -X POST 'http://localhost:80/helm/repo/update' --header 'Content-Type: application/json' --data-raw '{ "args": "--debug" }```
 
 ## Options
 
