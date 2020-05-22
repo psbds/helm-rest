@@ -3,8 +3,8 @@ import "reflect-metadata";
 import { expect } from 'chai';
 import 'mocha';
 import { StubbedInstance, stubInterface as StubInterface } from "ts-sinon";
-import * as chai from "chai";
-import * as chaiAsPromised from "chai-as-promised";
+import chai from "chai";
+import chaiAsPromised from "chai-as-promised";
 import { Logger } from "winston";
 chai.use(chaiAsPromised);
 
@@ -67,7 +67,7 @@ describe('Services: RepositoryConfiguration', () => {
 
         it('should log added repositories', async () => {
             var repositories = "stable=https://kubernetes-charts.storage.googleapis.com,bitnami=https://charts.bitnami.com/bitnami"
-                                                                              
+
             var spyLogger = loggerStub.log.withArgs({ level: "info", message: "Adding Repository: stable -> https://kubernetes-charts.storage.googleapis.com" });
             var spyLogger2 = loggerStub.log.withArgs({ level: "info", message: "Adding Repository: bitnami -> https://charts.bitnami.com/bitnami" });
             var spyLogger3 = loggerStub.log.withArgs({ level: "info", message: "Success" });
