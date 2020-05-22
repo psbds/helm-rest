@@ -20,7 +20,7 @@ stages:
       displayName: Build an image
       inputs:
         containerRegistry: 'dockerhub/psbds'
-        repository: 'helm-rest-pr'
+        repository: 'psbds/helm-rest-pr'
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
         tags: '$(tag)'
