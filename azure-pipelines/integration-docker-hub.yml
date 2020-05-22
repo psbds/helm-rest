@@ -5,7 +5,7 @@ resources:
 - repo: self
 
 variables:
-  tag: 'PR-$(System.PullRequest.PullRequestId)-B-$(Build.BuildId)'
+  tag: 'PR-$(Build.SourceBranchName)-B-$(Build.BuildId)'
 
 stages:
 - stage: Build
