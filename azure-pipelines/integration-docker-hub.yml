@@ -1,0 +1,38 @@
+# Docker
+# Build a Docker image 
+# https://docs.microsoft.com/azure/devops/pipelines/languages/docker
+resources:
+- repo: self
+
+variables:
+  tag: 'PR-$(System.PullRequest.PullRequestNumber)-Build-$(Build.BuildId)'
+
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:  
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        containerRegistry: 'dockerhub/psbds'
+        repository: 'psbds/helm-rest-pr'
+        command: 'buildAndPush'
+        Dockerfile: 'Dockerfile'
+        tags: '$(tag)'
+    - task: GitHubComment@0
+      inputs:
+        gitHubConnection: 'Github/Psbds'
+        repositoryName: 'psbds/helm-rest'
+        id: '$(System.PullRequest.PullRequestNumber)'
+        comment: |
+          * Check Complete at https://dev.azure.com/padasil/helm-rest/_build/results?buildId=$(Build.BuildId)&view=results
+          
+          * Docker Image Available at: https://hub.docker.com/repository/docker/psbds/helm-rest-pr/tags?page=1&name=$(tag)
+          
+          * Run Image
+          ```docker run -p 80:80 -e kubeconfig=<<base64stringhere>> psbds/helm-rest-pr:$(tag)```
