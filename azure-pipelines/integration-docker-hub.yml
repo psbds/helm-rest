@@ -5,7 +5,7 @@ resources:
 - repo: self
 
 variables:
-  tag: 'PR-$(System.PullRequest.PullRequestId)-B-$(Build.BuildId)'
+  tag: 'PR-$(System.PullRequest.PullRequestNumber)-B-$(Build.BuildId)'
 
 stages:
 - stage: Build
@@ -28,5 +28,5 @@ stages:
       inputs:
         gitHubConnection: 'Github/Psbds'
         repositoryName: 'psbds/helm-rest'
-        id: '$(System.PullRequest.PullRequestId)'
+        id: '$(System.PullRequest.PullRequestNumber)'
         comment: 'Testing'
