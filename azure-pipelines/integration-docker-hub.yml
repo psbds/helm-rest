@@ -29,4 +29,10 @@ stages:
         gitHubConnection: 'Github/Psbds'
         repositoryName: 'psbds/helm-rest'
         id: '$(System.PullRequest.PullRequestNumber)'
-        comment: '* Check Complete at https://dev.azure.com/padasil/helm-rest/_build/results?buildId=$(Build.BuildId)&view=results'
+        comment: |
+          * Check Complete at https://dev.azure.com/padasil/helm-rest/_build/results?buildId=$(Build.BuildId)&view=results
+          
+          * Docker Image Available at: https://hub.docker.com/repository/docker/psbds/helm-rest-pr/tags?page=1&name=$(tag)
+          
+          * Run Image
+          ```docker run -p 80:80 -e kubeconfig=<<base64stringhere>> psbds/helm-rest-pr:$(tag)```
