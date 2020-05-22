@@ -5,7 +5,7 @@ resources:
 - repo: self
 
 variables:
-  tag: 'PR-$(Build.SourceBranchName)-B-$(Build.BuildId)'
+  tag: 'PR-$(System.PullRequest.PullRequestId)-B-$(Build.BuildId)'
 
 stages:
 - stage: Build
@@ -24,3 +24,9 @@ stages:
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
         tags: '$(tag)'
+    - task: GitHubComment@0
+      inputs:
+        gitHubConnection: 'Github/Psbds'
+        repositoryName: 'psbds/helm-rest'
+        id: '$(System.PullRequest.PullRequestId)'
+        comment: 'Testing'
