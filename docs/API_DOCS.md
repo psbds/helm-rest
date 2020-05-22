@@ -12,6 +12,9 @@
 * [Repo Update](#Repo-Update)
 * [Command](#Command)
 
+## Options
+* [Add Simple Authentication](#Add-Simple-Authentication)
+* [Add Default Repositories](#Add-Default-Repositories)
 ### Install
 
 [Helm Docs](https://helm.sh/docs/helm/helm_install)
@@ -217,6 +220,25 @@ Command is the current Jack of all trades, to use commands that are not availabl
 
 ## Options
 
+### Add Simple Authentication
+
+To add a simple authentication, you can set the environment variable ```authenticationKey```, in this way, only calls to the ```/helm``` path having the ```Authorization``` header will be executed.
+
+Example:
+
+```
+# on the enviroment variables
+authenticationKey="myVerySpecialKey"
+``` 
+
+```
+# Calling the API
+curl -X POST 'http://localhost:80/helm/repo/update' --header 'Content-Type: application/json' 
+# Returns 401 Unauthorized
+
+curl -X POST 'http://localhost:80/helm/repo/update' --header 'Content-Type: application/json' --header 'Authorization: myVerySpecialKey'
+# Returns 200 OK
+```
 ### Add Default Repositories
 
 To add default repositories that will be setup every time the application is started, you can use the environment variable ```repositories``` following the approach below:
