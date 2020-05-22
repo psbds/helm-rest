@@ -5,7 +5,7 @@ resources:
 - repo: self
 
 variables:
-  tag: 'PR-$(System.PullRequest.PullRequestNumber)-B-$(Build.BuildId)'
+  tag: 'PR-$(System.PullRequest.PullRequestNumber)-Build-$(Build.BuildId)'
 
 stages:
 - stage: Build
@@ -29,4 +29,4 @@ stages:
         gitHubConnection: 'Github/Psbds'
         repositoryName: 'psbds/helm-rest'
         id: '$(System.PullRequest.PullRequestNumber)'
-        comment: 'Testing'
+        comment: '# Check Complete at https://dev.azure.com/padasil/helm-rest/_build/results?buildId=$(Build.BuildId)&view=results'
