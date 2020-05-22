@@ -29,4 +29,4 @@ stages:
         gitHubConnection: 'Github/Psbds'
         repositoryName: 'psbds/helm-rest'
         id: '$(System.PullRequest.PullRequestNumber)'
-        comment: '# Check Complete at https://dev.azure.com/padasil/helm-rest/_build/results?buildId=$(Build.BuildId)&view=results'
+        comment: '* Check Complete at https://dev.azure.com/padasil/helm-rest/_build/results?buildId=$(Build.BuildId)&view=results'
