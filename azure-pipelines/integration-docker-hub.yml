@@ -4,6 +4,9 @@
 resources:
 - repo: self
 
+# A pipeline with no CI trigger
+trigger: none
+
 variables:
   tag: 'PR-$(System.PullRequest.PullRequestNumber)-Build-$(Build.BuildId)'
 
@@ -24,6 +27,13 @@ stages:
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
         tags: '$(tag)'
+    - task: PowerShell@2
+      name: branchtransform 
+      inputs:
+        targetType: 'inline'
+        script: |
+          $newbranch = "$(System.PullRequest.SourceBranch)" -replace "/", "%2F"  
+          echo "##vso[task.setvariable variable=newSourceBranch;isOutput=true]$newbranch"
     - task: GitHubComment@0
       inputs:
         gitHubConnection: 'Github/Psbds'
@@ -36,3 +46,6 @@ stages:
           
           * Run Image
           ```docker run -p 80:80 -e kubeconfig=<<base64stringhere>> psbds/helm-rest-pr:$(tag)```
+
+          * Deploy Using Container Instances
+          [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fpsbds%2Fhelm-rest%2F$(branchtransform.newSourceBranch)%2Fdeployments%2Fcontainer-instances%2Fintegration-pull-request.json)
