@@ -4,7 +4,7 @@ import 'mocha';
 import { expect } from 'chai';
 import * as chai from "chai";
 import { StubbedInstance, stubInterface as StubInterface } from "ts-sinon";
-import * as chaiAsPromised from "chai-as-promised";
+import chaiAsPromised from "chai-as-promised";
 chai.use(chaiAsPromised);
 
 //# Imports

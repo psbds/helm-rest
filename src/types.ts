@@ -1,4 +1,4 @@
-import { Router, Request, Response, NextFunction, express } from "express";
+import { Router, Request, Response, NextFunction, Application } from "express";
 
 export interface IHelm {
 
@@ -62,15 +62,15 @@ export interface IRoute {
 export interface ICustomRoute {
 
     routes: IRoute[];
-    configureRouter(app: express.Application): Router
+    configureRouter(app: Application): Router
 
 }
 
 // Server
 export interface IServer {
     startServer(): void;
-    createApp(routes: ICustomRoute[]): express.Application;
-    createAppWithRoutes(): express.Application;
+    createApp(routes: ICustomRoute[]): Application;
+    createAppWithRoutes(): Application;
 }
 
 // Startup

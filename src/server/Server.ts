@@ -1,10 +1,12 @@
-import * as express from 'express';
-import * as http from 'http';
+import { Application } from 'express';
+import express from 'express';
+import http from 'http';
 import { injectable, inject } from "tsyringe";
 import { Logger } from 'winston';
 
 import * as serverEvents from './serverEvents';
 import DefaultHandler from './handlers/DefaultHandlers';
+import AuthenticationHandler from './handlers/AuthenticationHandler';
 import ErrorHandler from './handlers/ErrorHandler';
 import NotFoundHandler from './handlers/NotFoundHandler';
 import SwaggerHandler from './handlers/SwaggerHandler';
@@ -14,9 +16,10 @@ import { ICustomRoute, IServer } from '../types';
 @injectable()
 export default class Server implements IServer {
 
-    private app: express.Application;
-
+    private app: Application;
+    private authentication: boolean;
     constructor(@inject("CustomRoutes") private customRoutes: ICustomRoute[], @inject("Logger") private logger: Logger) {
+        this.authentication = !!process.env.authenticationKey;
     }
 
     startServer(): void {
@@ -26,15 +29,19 @@ export default class Server implements IServer {
         Server.on('listening', serverEvents.onListening.bind(Server));
     }
 
-    createAppWithRoutes(): express.Application {
+    createAppWithRoutes(): Application {
         var routeHandlers = this.customRoutes;
         return this.createApp(routeHandlers);
     }
 
-    createApp(routes: ICustomRoute[]): express.Application {
+    createApp(routes: ICustomRoute[]): Application {
         this.app = express();
 
         DefaultHandler(this.app);
+
+        if (this.authentication) {
+            AuthenticationHandler(this.app);
+        }
 
         if (routes && routes.length > 0) {
             for (var route of routes) {
@@ -48,7 +55,6 @@ export default class Server implements IServer {
 
         // App Settings
         this.app.set('port', process.env.PORT || 80);
-        this.app.set('secret', process.env.SECRET || 'superSecret');
 
         return this.app;
     }

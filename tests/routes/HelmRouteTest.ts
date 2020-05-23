@@ -3,7 +3,7 @@ import "reflect-metadata";
 import { expect } from 'chai';
 import 'mocha';
 import { StubbedInstance, stubInterface as StubInterface } from "ts-sinon";
-import { express } from "express";
+import { Application } from "express";
 
 //# Imports
 import { IHelm, ICustomRoute } from "../../src/types";
@@ -14,7 +14,7 @@ var request = require('supertest');
 
 describe('Routes: HelmRoute', () => {
     let helmStub: StubbedInstance<IHelm>;
-    let testServer: express.Application;
+    let testServer: Application;
     let helmRoute: HelmRoute;
     beforeEach(() => {
         helmStub = StubInterface<IHelm>();
