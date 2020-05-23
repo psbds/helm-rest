@@ -15,7 +15,7 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     }
 
     /**
-    * POST /helm/rollback 
+    * POST /helm/command 
     * @swagger
     * /helm/command:
     *   post:
@@ -23,6 +23,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     - "helm"
     *     summary: "Runs any helm command"
     *     description: "Runs any helm command"
+    *     security:
+    *     - ApiKeyAuth: []
     *     produces:
     *     - "application/json"
     *     consumes:
@@ -35,6 +37,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     responses:
     *       "200":
     *         description: "Helm stdout"
+    *       "401":
+    *         description: "Unauthorized"
     *       "500":
     *         description: "Helm stderr"
     */
@@ -57,25 +61,29 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     * DELETE /helm/delete 
     * @swagger
     * /helm/delete:
-    *     delete:
-    *       tags:
-    *       - "helm"
-    *       summary: "Delete a Helm Release in the cluster"
-    *       description: "Delete a Helm Release in the cluster"
-    *       produces:
-    *       - "application/json"
-    *       consumes:
-    *       - "application/json"
-    *       parameters:
-    *         - in: query
-    *           name: query
-    *           schema:
-    *              $ref: "#/components/schemas/HelmDelete"
-    *       responses:
-    *         "200":
-    *           description: "Helm stdout"
-    *         "500":
-    *           description: "Helm stderr"
+    *   delete:
+    *     tags:
+    *     - "helm"
+    *     summary: "Delete a Helm Release in the cluster"
+    *     description: "Delete a Helm Release in the cluster"
+    *     security:
+    *     - ApiKeyAuth: []
+    *     produces:
+    *     - "application/json"
+    *     consumes:
+    *     - "application/json"
+    *     parameters:
+    *       - in: query
+    *         name: query
+    *         schema:
+    *            $ref: "#/components/schemas/HelmDelete"
+    *     responses:
+    *       "200":
+    *         description: "Helm stdout"
+    *       "401":
+    *         description: "Unauthorized"
+    *       "500":
+    *         description: "Helm stderr"
     */
     @RouteConfig("delete", "/delete")
     async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -101,6 +109,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     - "helm"
     *     summary: "Get a Helm Release information from the cluster"
     *     description: "Get a Helm Release information from the cluster"
+    *     security:
+    *     - ApiKeyAuth: []
     *     produces:
     *     - "application/json"
     *     consumes:
@@ -113,6 +123,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     responses:
     *       "200":
     *         description: "Helm stdout"
+    *       "401":
+    *         description: "Unauthorized"
     *       "500":
     *         description: "Helm stderr"
     */
@@ -136,24 +148,28 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     * @swagger
     * /helm/install:
     *   post:
-    *      tags:
-    *      - "helm"
-    *      summary: "Install a Helm Chart in the cluster"
-    *      description: "Install a Helm Chart in the cluster"
-    *      produces:
-    *      - "application/json"
-    *      consumes:
-    *      - "application/json"
-    *      requestBody:
-    *        content:
-    *          application/json:
-    *            schema:
-    *              $ref: "#/components/schemas/HelmInstall"
-    *      responses:
-    *        "200":
-    *          description: "Helm stdout"
-    *        "500":
-    *          description: "Helm stderr"
+    *     tags:
+    *     - "helm"
+    *     summary: "Install a Helm Chart in the cluster"
+    *     description: "Install a Helm Chart in the cluster"
+    *     security:
+    *     - ApiKeyAuth: []
+    *     produces:
+    *     - "application/json"
+    *     consumes:
+    *     - "application/json"
+    *     requestBody:
+    *       content:
+    *         application/json:
+    *           schema:
+    *             $ref: "#/components/schemas/HelmInstall"
+    *     responses:
+    *       "200":
+    *         description: "Helm stdout"
+    *       "401":
+    *         description: "Unauthorized"
+    *       "500":
+    *         description: "Helm stderr"
     */
     @RouteConfig("post", "/install")
     async install(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -175,24 +191,28 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     * @swagger
     * /helm/list:
     *   get:
-    *      tags:
-    *      - "helm"
-    *      summary: "List Helm releases installed in the cluster."
-    *      description: "List Helm releases installed in the cluster."
-    *      consumes:
-    *      - "application/json"
-    *      produces:
-    *      - "application/json"
-    *      parameters:
-    *        - in: query
-    *          name: query
-    *          schema:
-    *             $ref: "#/components/schemas/HelmList"
-    *      responses:
-    *          "200":
-    *              description: Helm stdout
-    *          "500":
-    *              description: Helm stderr
+    *     tags:
+    *     - "helm"
+    *     summary: "List Helm releases installed in the cluster."
+    *     description: "List Helm releases installed in the cluster."
+    *     security:
+    *     - ApiKeyAuth: []
+    *     consumes:
+    *     - "application/json"
+    *     produces:
+    *     - "application/json"
+    *     parameters:
+    *     - in: query
+    *       name: query
+    *       schema:
+    *          $ref: "#/components/schemas/HelmList"
+    *     responses:
+    *       "200":
+    *         description: "Helm stdout"
+    *       "401":
+    *         description: "Unauthorized"
+    *       "500":
+    *         description: Helm stderr
     */
     @RouteConfig("get", "/list")
     async list(req: any, res: any, next: any): Promise<void> {
@@ -218,6 +238,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     - "experimental"
     *     summary: "Authenticate to a remote registry (Experimental use of OCI Registry: https://helm.sh/docs/topics/registries/)."
     *     description: "Authenticate to a remote registry (Experimental use of OCI Registry: https://helm.sh/docs/topics/registries/)."
+    *     security:
+    *     - ApiKeyAuth: []
     *     produces:
     *     - "application/json"
     *     consumes:
@@ -230,6 +252,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     responses:
     *       "200":
     *         description: "Helm stdout"
+    *       "401":
+    *         description: "Unauthorized"
     *       "500":
     *         description: "Helm stderr"
     */
@@ -257,6 +281,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     - "helm"
     *     summary: "Rollback Helm Release in the cluster"
     *     description: "Rollback Helm Release in the cluster"
+    *     security:
+    *     - ApiKeyAuth: []
     *     produces:
     *     - "application/json"
     *     consumes:
@@ -269,6 +295,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     responses:
     *       "200":
     *         description: "Helm stdout"
+    *       "401":
+    *         description: "Unauthorized"
     *       "500":
     *         description: "Helm stderr"
     */
@@ -296,6 +324,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     - "helm"
     *     summary: "Update gets the latest information about charts from the respective chart repositories."
     *     description: "Update gets the latest information about charts from the respective chart repositories."
+    *     security:
+    *     - ApiKeyAuth: []
     *     produces:
     *     - "application/json"
     *     consumes:
@@ -308,6 +338,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     responses:
     *       "200":
     *         description: "Helm stdout"
+    *       "401":
+    *         description: "Unauthorized"
     *       "500":
     *         description: "Helm stderr"
     */
@@ -335,6 +367,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     - "helm"
     *     summary: "Rollback Helm Release in the cluster"
     *     description: "Rollback Helm Release in the cluster"
+    *     security:
+    *     - ApiKeyAuth: []
     *     produces:
     *     - "application/json"
     *     consumes:
@@ -347,6 +381,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     responses:
     *       "200":
     *         description: "Helm stdout"
+    *       "401":
+    *         description: "Unauthorized"
     *       "500":
     *         description: "Helm stderr"
     */
@@ -374,6 +410,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     - "helm"
     *     summary: "Upgrade a Helm Release in the cluster"
     *     description: "Upgrade a Helm Release in the cluster"
+    *     security:
+    *     - ApiKeyAuth: []
     *     produces:
     *     - "application/json"
     *     consumes:
@@ -386,6 +424,8 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     *     responses:
     *       "200":
     *         description: "Helm stdout"
+    *       "401":
+    *         description: "Unauthorized"
     *       "500":
     *         description: "Helm stderr"
     */

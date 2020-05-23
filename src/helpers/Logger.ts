@@ -14,6 +14,10 @@ if (process.env.NODE_ENV != "unit-test") {
             format: winston.format.simple()
         }));
     }
+}else{
+    logger.add(new winston.transports.Console({
+        silent: true
+    }));
 }
 
 export default logger;
