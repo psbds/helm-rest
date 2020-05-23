@@ -5,7 +5,7 @@ import { RouteConfig, BaseRoute, RoutePrefix } from "./BaseRoute";
 import { IHealthcheck } from "../types";
 
 @injectable()
-@RoutePrefix("//health")
+@RoutePrefix("/health")
 export default class HealthcheckRoute extends BaseRoute implements IHealthcheck {
 
     constructor() {
@@ -16,7 +16,7 @@ export default class HealthcheckRoute extends BaseRoute implements IHealthcheck 
     * GET /health 
     * @swagger
     * /health:
-    *   post:
+    *   get:
     *     tags:
     *     - "healthcheck"
     *     summary: "Check if the web server is running properly"
@@ -31,7 +31,7 @@ export default class HealthcheckRoute extends BaseRoute implements IHealthcheck 
     *       "500":
     *         description: "Internal Server Error"
     */
-    @RouteConfig("get", "")
+    @RouteConfig("get", "/")
     async health(req: Request, res: Response, next: NextFunction): Promise<void> {
         res.status(200).json("OK");
     }
