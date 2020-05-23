@@ -27,11 +27,11 @@ stages:
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
         tags: '$(tag)'
-    - task: AzurePowerShell@5
+    - task: PowerShell@2
       name: branchtransform 
       inputs:
-        ScriptType: 'InlineScript'
-        Inline: |
+        targetType: 'inline'
+        script: |
           $newbranch = "$(System.PullRequest.SourceBranch)" -replace "/", "%2F"  
           echo "##vso[task.setvariable variable=newSourceBranch;isOutput=true]$newbranch"
     - task: GitHubComment@0
