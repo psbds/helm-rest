@@ -4,6 +4,9 @@
 resources:
 - repo: self
 
+# A pipeline with no CI trigger
+trigger: none
+
 variables:
   tag: 'PR-$(System.PullRequest.PullRequestNumber)-Build-$(Build.BuildId)'
 
