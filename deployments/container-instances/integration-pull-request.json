@@ -32,7 +32,7 @@
 					{
 						"name": "[parameters('containerName')]",
 						"properties": {
-							"image": "[concat('psbds/helm-rest-pr', parameters('tag'))]",
+							"image": "[concat('psbds/helm-rest-pr:', parameters('tag'))]",
 							"resources": {
 								"requests": {
 									"cpu": "1",
