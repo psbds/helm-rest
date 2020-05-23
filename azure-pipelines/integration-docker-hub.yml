@@ -4,12 +4,9 @@
 resources:
 - repo: self
 
-<<<<<<< HEAD
 # A pipeline with no CI trigger
 trigger: none
 
-=======
->>>>>>> master
 variables:
   tag: 'PR-$(System.PullRequest.PullRequestNumber)-Build-$(Build.BuildId)'
 
