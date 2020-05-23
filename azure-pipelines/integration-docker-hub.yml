@@ -27,6 +27,13 @@ stages:
         command: 'buildAndPush'
         Dockerfile: 'Dockerfile'
         tags: '$(tag)'
+    - task: AzurePowerShell@5
+      name: branchtransform 
+      inputs:
+        ScriptType: 'InlineScript'
+        Inline: |
+          $newbranch = "$(System.PullRequest.SourceBranch)" -replace "/", "%2F"  
+          echo "##vso[task.setvariable variable=newSourceBranch;isOutput=true]$newbranch"
     - task: GitHubComment@0
       inputs:
         gitHubConnection: 'Github/Psbds'
@@ -41,4 +48,4 @@ stages:
           ```docker run -p 80:80 -e kubeconfig=<<base64stringhere>> psbds/helm-rest-pr:$(tag)```
 
           * Deploy Using Container Instances
-          [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fpsbds%2Fhelm-rest%2F%24%28$(System.PullRequest.SourceBranch)%29%2Fdeployments%2Fcontainer-instances%2Fintegration-pull-request.json)
+          [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fpsbds%2Fhelm-rest%2F%24%28$(branchtransform.newbranch)%29%2Fdeployments%2Fcontainer-instances%2Fintegration-pull-request.json)
