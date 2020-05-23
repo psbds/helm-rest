@@ -36,3 +36,6 @@ stages:
           
           * Run Image
           ```docker run -p 80:80 -e kubeconfig=<<base64stringhere>> psbds/helm-rest-pr:$(tag)```
+
+          * Deploy Using Container Instances
+          [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fpsbds%2Fhelm-rest%2F%24%28Build.SourceBranchName%29%2Fdeployments%2Fcontainer-instances%2Fintegration-pull-request.json)

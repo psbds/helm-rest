@@ -1,0 +1,80 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"containerName": {
+			"type": "string",
+			"defaultValue": "helm-rest-pull-request"
+		},
+		"tag": {
+			"type": "string"
+		},
+		"env_kubeconfig": {
+			"type": "string"
+		},
+		"env_authenticationKey": {
+			"type": "string",
+			"defaultValue": ""
+		},
+		"env_repositories": {
+			"type": "string",
+			"defaultValue": "stable=https://kubernetes-charts.storage.googleapis.com"
+		}
+	},
+	"resources": [
+		{
+			"location": "[resourceGroup().location]",
+			"name": "[parameters('containerName')]",
+			"type": "Microsoft.ContainerInstance/containerGroups",
+			"apiVersion": "2018-10-01",
+			"properties": {
+				"containers": [
+					{
+						"name": "[parameters('containerName')]",
+						"properties": {
+							"image": "[concat('psbds/helm-rest-pr', parameters('tag'))]",
+							"resources": {
+								"requests": {
+									"cpu": "1",
+									"memoryInGB": "1.5"
+								}
+							},
+							"environmentVariables": [
+								{
+									"name": "kubeconfig",
+									"value": "[parameters('env_kubeconfig')]"
+								},
+								{
+									"name": "repositories",
+									"value": "[parameters('env_repositories')]"
+								},
+								{
+									"name": "authenticationKey",
+									"value": "[parameters('env_authenticationKey')]"
+								}
+							],
+							"ports": [
+								{
+									"protocol": "TCP",
+									"port": 80
+								}
+							]
+						}
+					}
+				],
+				"restartPolicy": "Never",
+				"osType": "Linux",
+				"ipAddress": {
+					"type": "Public",
+					"ports": [
+						{
+							"protocol": "TCP",
+							"port": 80
+						}
+					]
+				}
+			},
+			"tags": {}
+		}
+	]
+}
