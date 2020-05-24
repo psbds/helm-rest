@@ -53,6 +53,12 @@ export interface IHelmRoute extends ICustomRoute {
     list(req: Request, res: Response, next: NextFunction): void;
 }
 
+export interface IHealthcheck extends ICustomRoute{
+
+    health(req: Request, res: Response, next: NextFunction): void;
+    
+}
+
 export interface IRoute {
     route: string;
     method: string;

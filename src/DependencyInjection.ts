@@ -3,6 +3,7 @@ import { container, DependencyContainer } from "tsyringe";
 import logger from "./helpers/Logger";
 import ExecHelper from "./helpers/ExecLibHelper";
 import HelmRoute from "./routes/HelmRoute";
+import HealthcheckRoute from "./routes/HealthcheckRoute";
 
 import Helm from "./services/Helm";
 import KubeConfiguration from "./services/KubeConfiguration";
@@ -39,10 +40,12 @@ export class DependencyInjection {
 
         // Routes
         container.register("IHelmRoute", { useClass: HelmRoute });
+        container.register("IHeathcheckRoute", { useClass: HealthcheckRoute });
 
         // Injecting Routes for Express
         const Routes = [
-            "IHelmRoute"
+            "IHelmRoute",
+            "IHeathcheckRoute"
         ];
         var customRoutes = Routes.map(route => Instance.getContainer().resolve<ICustomRoute>(route));
         container.register("CustomRoutes", { useValue: customRoutes })
