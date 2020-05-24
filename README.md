@@ -1,16 +1,37 @@
 # Helm Rest
+<p align="center">
+    <a href="https://hub.docker.com/r/psbds/helm-rest">
+        <img src="https://img.shields.io/docker/v/psbds/helm-rest?label=Latest%20Version" />
+        <img src="https://img.shields.io/docker/image-size/psbds/helm-rest" />
+        <img src="https://img.shields.io/docker/pulls/psbds/helm-rest" />
+    </a>
+</p>
 
-[![Build Status ](https://img.shields.io/azure-devops/build/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/17/develop?label=build%3A%20develop)](https://dev.azure.com/padasil/helm-rest/_build?definitionId=17)
-[![Build Status ](https://img.shields.io/azure-devops/build/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/18?label=build%3A%20master)](https://dev.azure.com/padasil/helm-rest/_build?definitionId=17)
+<p align="center">
+    <a href="https://dev.azure.com/padasil/helm-rest/_build?definitionId=18">
+        <img src="https://img.shields.io/azure-devops/build/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/18?label=build%3A%20master"/>
+    </a>
+    <a href="https://dev.azure.com/padasil/helm-rest/_build?definitionId=18">
+        <img src="https://img.shields.io/azure-devops/tests/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/18?label=tests%3A%20master&passed_label=good&failed_label=bad&skipped_label=n%2Fa"/>
+    </a>
+    <a href="https://dev.azure.com/padasil/helm-rest/_build?definitionId=18">
+        <img src="https://img.shields.io/azure-devops/coverage/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/18?label=coverage%3A%20master"/>
+    </a>
+</p>
 
+<p align="center">
+    <a href="https://dev.azure.com/padasil/helm-rest/_build?definitionId=17">
+        <img src="https://img.shields.io/azure-devops/build/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/17/develop?label=build%3A%20develop"/>
+    </a>
+    <a href="https://dev.azure.com/padasil/helm-rest/_build?definitionId=17">
+        <img src="https://img.shields.io/azure-devops/tests/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/17?label=tests%3A%20develop&passed_label=good&failed_label=bad&skipped_label=n%2Fa"/>
+    </a>
+    <a href="https://dev.azure.com/padasil/helm-rest/_build?definitionId=17">
+        <img src="https://img.shields.io/azure-devops/coverage/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/17?label=coverage%3A%20develop"/>
+    </a>
+</p>
 
-[![Build Status ](https://img.shields.io/azure-devops/tests/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/17?label=tests%3A%20develop&passed_label=good&failed_label=bad&skipped_label=n%2Fa)](https://dev.azure.com/padasil/helm-rest/_build?definitionId=17)
-[![Build Status ](https://img.shields.io/azure-devops/tests/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/18?label=tests%3A%20master&passed_label=good&failed_label=bad&skipped_label=n%2Fa)](https://dev.azure.com/padasil/helm-rest/_build?definitionId=17)
-
-[![Build Status ](https://img.shields.io/azure-devops/coverage/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/17?label=coverage%3A%20develop)](https://dev.azure.com/padasil/helm-rest/_build?definitionId=17)
-[![Build Status ](https://img.shields.io/azure-devops/coverage/padasil/7756fbc8-a76f-45bb-bbca-63811b5a93a4/18?label=coverage%3A%20master)](https://dev.azure.com/padasil/helm-rest/_build?definitionId=17)
-
-Web Application to enable to run helm commands using REST
+Web Application to enable to run helm commands using REST calls.
 
 * [Getting Started](./docs/GETTING_STARTED.md)
 * [Contributing](./docs/CONTRIBUTING.md)
@@ -36,3 +57,15 @@ curl -X GET 'http://localhost:81/helm/list?args=-o%20json'
 "[{\"name\":\"ingress\",\"namespace\":\"default\",\"revision\":\"1\",\"updated\":\"2020-05-19 08:27:25.9591898 +0000 UTC\",\"status\":\"deployed\",\"chart\":\"nginx-ingress-1.37.0\",\"app_version\":\"0.32.0\"}]"
 ```
 
+### All Available Commands:
+* Install
+* Get
+* List
+* Upgrade
+* Delete
+* Rollback
+* Repo Add
+* Repo Update
+* Command
+
+Full documentation at [API Docs](./docs/API_DOCS.md).
