@@ -40,7 +40,36 @@ TBD
 
 ## Running the project with Helm
 
-TBD
+You can find the helm chart to deploy this application in the deployments/helm path.
+
+
+The only required parameter is the ```secrets.kubeconfig```.
+
+Example:
+
+```
+helm install myHelmRest deployments/helm --set secrets.kubeconfig=<<base64stringhere>>
+```
+
+|Parameter                            |Type   |Required | Description|
+|---                                  |---    |---      | ---|
+|```secrets.kubeconfig```             |string |true     | kubeconfig base64 string to authenticate with the target cluster.
+|```secrets.authenticationKey```      |string |false    | [Key to authenticate with the API in plain string](./API_DOCS.md#Add-Simple-Authentication).
+|```secrets.repositories```           |string |false    | [Repositories that will be setup every time the application is started in plain string](API_DOCS.md#add-default-repositories).
+|```secrets.base64AuthenticationKey```|string |false    | [Key to authenticate with the API in base64](./API_DOCS.md#Add-Simple-Authentication).
+|```secrets.base64Repositories```     |string |false    | [Repositories that will be setup every time the application is started in base64](API_DOCS.md#add-default-repositories).
+|```replicaCount```                   |string |true     | Number of replicas for the application running on the cluster.
+|```image.tag```                      |string |true     | Tag of this project Docker image. Defaults to ```v0.1.0```.
+|```service.type```                   |string |false    | Sets service type. Defaults to ```ClusterIP```.
+|```service.ports```                  |string |false    | Sets service http port. Defaults to ```80```.
+|```resources.limits.cpu```	          |string |false    | Set pod CPU resource limits. Defaults to ```200m```.
+|```resources.limits.memory```        |string |false    | Set pod CPU resource limits. Defaults to ```256Mi```.
+|```resources.requests.cpu```	      |string |false    | Set pod CPU resource limits. Defaults to ```100m```.
+|```resources.requests.memory```	  |string |false    | Set pod CPU resource limits. Defaults to ```128Mi```.
+|```nodeSelector```	                  |object |false    | Node labels for pod assignment.
+|```tolerations```	                  |object |false    | Node taints to tolerate (requires Kubernetes >=1.6).
+|```affinity```	                      |object |false    | Node/pod affinities (requires Kubernetes >=1.6).	
+
 
 ## Available Commands
 

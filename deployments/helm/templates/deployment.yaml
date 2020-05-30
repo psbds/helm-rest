@@ -14,13 +14,9 @@ spec:
       labels:
         {{- include "helm-rest.selectorLabels" . | nindent 8 }}
     spec:
-    {{- with .Values.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
-    {{- end }}
       containers:
         - name: {{ .Chart.Name }}
-          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - name: http
@@ -28,14 +24,36 @@ spec:
               protocol: TCP
           livenessProbe:
             httpGet:
-              path: /
+              path: /health
               port: http
           readinessProbe:
             httpGet:
-              path: /
+              path: /health
               port: http
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          {{- if .Values.secrets.kubeconfig }}
+          - name: kubeconfig
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "helm-rest.fullname" . }}
+                key: kubeconfig
+          {{- end }}
+          {{- if or (.Values.secrets.authenticationKey) (.Values.secrets.base64AuthenticationKey) }}
+          - name: authenticationKey
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "helm-rest.fullname" . }}
+                key: authenticationKey
+          {{- end }}
+          {{- if or (.Values.secrets.repositories) (.Values.secrets.base64Repositories) }}
+          - name: repositories
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "helm-rest.fullname" . }}
+                key: repositories
+          {{- end }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
