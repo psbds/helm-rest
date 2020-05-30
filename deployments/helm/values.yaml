@@ -1,0 +1,34 @@
+# Default values for helm-rest.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+image:
+  repository: psbds/helm-rest
+  tag: v0.1.0
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 80
+
+secrets:
+  kubeconfig:
+  repositories:
+  authenticationKey:
+  base64Repositories:
+  base64AuthenticationKey:
+
+resources:
+  limits:
+    cpu: 200m
+    memory: 256Mi
+  requests:
+    cpu: 100m
+    memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
