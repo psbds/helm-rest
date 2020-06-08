@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "helm-rest.fullname" . }}
+  labels:
+    {{- include "helm-rest.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "helm-rest.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "helm-rest.selectorLabels" . | nindent 8 }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          env:
+          {{- if .Values.secrets.kubeconfig }}
+          - name: kubeconfig
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "helm-rest.fullname" . }}
+                key: kubeconfig
+          {{- end }}
+          {{- if or (.Values.secrets.authenticationKey) (.Values.secrets.base64AuthenticationKey) }}
+          - name: authenticationKey
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "helm-rest.fullname" . }}
+                key: authenticationKey
+          {{- end }}
+          {{- if or (.Values.secrets.repositories) (.Values.secrets.base64Repositories) }}
+          - name: repositories
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "helm-rest.fullname" . }}
+                key: repositories
+          {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+    {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
