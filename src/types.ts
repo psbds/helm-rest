@@ -15,6 +15,13 @@ export interface IHelm {
 
 }
 
+
+export interface IKubectl {
+
+    command(command: string): Promise<string>;
+
+}
+
 export interface IKubeConfiguration {
 
     setupKubeConfig(kubeconfigContent: string): Promise<void>;
@@ -53,10 +60,14 @@ export interface IHelmRoute extends ICustomRoute {
     list(req: Request, res: Response, next: NextFunction): void;
 }
 
-export interface IHealthcheck extends ICustomRoute{
+export interface IKubectlRoute extends ICustomRoute {
+    command(req: Request, res: Response, next: NextFunction): void;
+}
+
+export interface IHealthcheck extends ICustomRoute {
 
     health(req: Request, res: Response, next: NextFunction): void;
-    
+
 }
 
 export interface IRoute {
