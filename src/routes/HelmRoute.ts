@@ -361,7 +361,7 @@ export default class HelmRoute extends BaseRoute implements IHelmRoute {
     /**
     * PUT /helm/rollback 
     * @swagger
-    * /helm/rolback:
+    * /helm/rollback:
     *   put:
     *     tags:
     *     - "helm"
