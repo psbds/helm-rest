@@ -42,6 +42,8 @@ COPY --from=build /build/package-lock.json .
 COPY --from=build /services/kubectl /usr/local/bin/
 COPY --from=build /services/helm /usr/local/bin/
 
+RUN chmod +x /usr/local/bin/kubectl
+
 RUN npm install
 
 ENTRYPOINT [ "npm" , "start"]
