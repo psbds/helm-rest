@@ -7,13 +7,13 @@ This doc details how to run this project in production, you can find instruction
 
 So the web app can authenticate with your Kubernetes Services, you need to generate to create a service account, give the proper permissions and generate a kubeconfig file. Below the instructios to do so.
 
-### First of all, log in into your cluster as admin
+### 1. First of all, log in into your cluster as admin
 ```
 # Using Azure Kubernetes Service, you can do so using the following commnad
 az aks get-credentials --name myAks --resource-group myRg --admin
 ```
 
-### Option A: Run the create_kubeconfig.bash script to create the necessary configurations
+### 2. (Option A): Run the create_kubeconfig.bash script to create the necessary configurations
 On the root of the project, run the command: `./create_kubeconfig.bash SERVICE_ACCOUNT_NAME SERVICE_ACCOUNT_NAMESPACE`
 
 Example:
@@ -22,7 +22,7 @@ Example:
 ./create_kubeconfig.bash helm-rest default
 ```
 
-### Option B: Step by Step
+### 2. (Option B): Step by Step
 
 You can find the Step by Step instructions [here](./KUBECONFIG_DETAILED.md)
 
@@ -34,9 +34,6 @@ Than run the following command:
 ```
 docker run -p 80:80 -e kubeconfig=<<base64stringhere>> psbds/helm-rest:v0.1.0
 ```
-
-## Running the project inside Kubernetes
-TBD
 
 ## Running the project with Helm
 

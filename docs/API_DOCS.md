@@ -15,6 +15,9 @@
 ## Options
 * [Add Simple Authentication](#Add-Simple-Authentication)
 * [Add Default Repositories](#Add-Default-Repositories)
+
+## Available Commands
+
 ### Install
 
 [Helm Docs](https://helm.sh/docs/helm/helm_install)
@@ -218,7 +221,7 @@ Command is the current Jack of all trades, to use commands that are not availabl
 
 ```curl -X POST 'http://localhost:80/helm/repo/update' --header 'Content-Type: application/json' --data-raw '{ "args": "--debug" }```
 
-## Options
+## Available Options
 
 ### Add Simple Authentication
 
