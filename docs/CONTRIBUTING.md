@@ -2,7 +2,7 @@
 
 This document, explains how to contribute for this project and how to run locally.
 
-## Contributing Guidelines
+## Contribution Guidelines
 
 Feel free to contribute with fork/pull Requests or raising issues/questions.
 

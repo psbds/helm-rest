@@ -1,23 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <title>Document</title>
-  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-  <meta name="description" content="Description">
-  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/lib/themes/vue.css">
+	<meta charset="UTF-8">
+	<title>Document</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+	<meta name="description" content="Description">
+	<meta name="viewport"
+		content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/docsify/lib/themes/vue.css">
 </head>
+
 <body>
-  <div id="app"></div>
-  <script>
-    window.$docsify = {
-      name: 'Helm Rest',
-      repo: 'https://github.com/psbds/helm-rest',
-      loadSidebar: true,
-      subMaxLevel: 3
-    }
-  </script>
-  <script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+	<div id="app"></div>
+	<script src="//cdn.jsdelivr.net/npm/docsify/lib/docsify.min.js"></script>
+	<script src="//cdn.jsdelivr.net/npm/docsify-edit-on-github"></script>
+	<script>
+		window.$docsify = {
+			name: 'Helm Rest',
+			repo: 'https://github.com/psbds/helm-rest',
+			loadSidebar: true,
+			subMaxLevel: 3,
+			plugins: [
+				EditOnGithubPlugin.create("https://github.com/docsifyjs/docsify/blob/master/docs/", null, "Edit on Github")
+			],
+			copyCode: {
+				buttonText: 'Copy to clipboard',
+				errorText: 'Error',
+				successText: 'Copied'
+			}
+		}
+	</script>
+	<script src="https://unpkg.com/docsify-copy-code@2"></script>
+	<link rel="stylesheet" href="//unpkg.com/docsify/themes/pure.css">
+
 </body>
+
 </html>
