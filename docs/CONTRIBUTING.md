@@ -32,27 +32,28 @@ After starting VSCode in a Container Environment, you have the following options
 
 Inside the ```.vscode/launch.json```, there's the following configurations:
 
-| Configuration Name | Description
-|---                 |---
-| Debug              | Run the Project with debug attached.
-| Test               | Run the Unit Tests with debug attached.
+| Configuration Name | Description|
+|---                 |---|
+| Debug              | Run the Project with debug attached.|
+| Test               | Run the Unit Tests with debug attached.|
 
 
 #### NPM Scripts
 
 Inside the package.json, you will find the following commands:
-| Command            | Description
-|---                 |---
-| ```compile```      | Run the typescript transipler to create the project .js files inside the ```bin``` folder, also runs the ```swagger``` command.
-| ```debug```        | Runs the ```compile``` command and starts the project in debug mode.
-|```start```         | Starts the project in non-debug mode. OBS: ```compile``` command is required before.
-| ```test```         | Runs unit tests and write results to the ```testReport/test-results.xml``` file
-| ```test-debug```   | Runs unit tests in debug mode.
-| ```test-local```   | Runs unit tests and show results in console.
-| ```test-mutation```| Runs mutation tests using [Stryker](https://stryker-mutator.io/).
-| ```coverage```         | Runs the compile command and check code coverage from the unit tests writing results to the ```testReport/cobertura-coverage.xml``` file.
-| ```coverage-local```         | Runs the compile command and check code coverage from the unit tests writing results to the console.
-| ```swagger```     | Read the Swagger annotations in the code, and create the ```bin/swagger.json``` file.
+
+| Command            | Description|
+|---                 |---|
+| ```compile```      | Run the typescript transipler to create the project .js files inside the ```bin``` folder, also runs the ```swagger``` command.|
+| ```debug```        | Runs the ```compile``` command and starts the project in debug mode.|
+|```start```         | Starts the project in non-debug mode. OBS: ```compile``` command is required before.|
+| ```test```         | Runs unit tests and write results to the ```testReport/test-results.xml``` file|
+| ```test-debug```   | Runs unit tests in debug mode.|
+| ```test-local```   | Runs unit tests and show results in console.|
+| ```test-mutation```| Runs mutation tests using [Stryker](https://stryker-mutator.io/).|
+| ```coverage```         | Runs the compile command and check code coverage from the unit tests writing results to the ```testReport/cobertura-coverage.xml``` file.|
+| ```coverage-local```         | Runs the compile command and check code coverage from the unit tests writing results to the console.|
+| ```swagger```     | Read the Swagger annotations in the code, and create the ```bin/swagger.json``` file.|
 
 ## Continuous Integration
 
